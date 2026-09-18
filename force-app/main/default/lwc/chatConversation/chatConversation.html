@@ -1,0 +1,421 @@
+<template>
+    <!-- <c-Whatsapp-multi-image-sender record-id={recordId} business-number={businessNumber} phone-number={phoneNumber}
+        customer-name={customerName}> </c-Whatsapp-multi-image-sender> -->
+
+    <div class="slds-col slds-large-size_8-of-12 slds-medium-size_1-of-12 slds-size_1-of-12 "
+        style="width: 100%;height: 60.3vh; background-color:white; box-shadow: 0px 0px 1px 1px lightgray;">
+        <div>
+            <section role="log" style="height: 100%;">
+                <div class="slds-chat-bookend">
+                    <div class="profiledetails" style="margin:0 10px; padding: 0 10px;">
+                        <div class="profile-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" style="margin-bottom:-12px"
+                                fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                            </svg>
+                        </div>
+                        <div class="customerNamePhone">
+                            <h2><b>{customerName}</b></h2>
+                            <h6>{phoneNumber}</h6>
+                        </div>
+                    </div>
+                    <div class="customer-details">
+                        <lightning-combobox class="businessContacts" name="progress" value={businessNumber}
+                            placeholder="Select Business" options={options} onchange={handleChange}
+                            style="border-radius: 20px; height: 36px;">
+                        </lightning-combobox>
+                    </div>
+                </div>
+                <div class="slds-chat-list chat-messages" style="height: 45vh; overflow-y: auto;">
+                    <template for:each={messages} for:item="message">
+                        <div key={message.Id} data-id={message.Id}>
+                            <!-- Inbound Messages -->
+                            <template if:true={message.isInbound}>
+                                <div class="slds-chat-listitem slds-chat-listitem_inbound">
+                                    <div class="slds-chat-message">
+                                        <div class="slds-chat-message__body">
+                                            <template if:true={message.isText}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                    {message.MessageContent__c}
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isButton}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                    {message.TemplateButtonText__c}
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isTemplate}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                    The Template With this Name has Been Shared:
+                                                    {message.TemplateName__c}
+                                                </div>
+                                            </template>
+
+                                            <template if:true={message.isReaction}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                    {message.Reaction__c}
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isImage}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound  ">
+                                                    <div class="slds-chat-message__image" style="max-width: 25vw;">
+                                                        <img src={message.MediaLink__c} alt="Media content"
+                                                                    class="slds-chat-message__media" />
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isVideo}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                    <div class="slds-chat-message__video">
+                                                        <video src={message.MediaLink__c} alt="Media content"
+                                                            width="320" height="240" controls type="video/mp4"
+                                                            class="slds-chat-message__media"></video>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isAudio}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                    <div class="slds-chat-message__audio">
+                                                        <audio src={message.MediaLink__c} alt="Media content"
+                                                            width="320" height="240" controls type="audio/m3"
+                                                            class="slds-chat-message__media"></audio>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isDocument}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                    <div>
+                                                        <a href={message.MediaLink__c}>
+                                                            Document
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isInteractive}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    The Template With this Name has Been Shared:
+                                                    {message.TemplateName__c}
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isOrder}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                    The Order has been placed from customer:
+                                                    {message.MessageType__c}
+                                                </div>
+                                            </template>
+
+                                            <div class="slds-chat-message__meta slds-chat-message__meta_inbound">
+                                                {message.CustomerName__c} • {message.formattedDateTime}
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Outbound Messages -->
+                            <template if:true={message.isOutbound}>
+                                <div class="slds-chat-listitem slds-chat-listitem_outbound">
+                                    <div class="slds-chat-message">
+                                        <div class="slds-chat-message__body">
+                                            <template if:true={message.isText}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    {message.MessageContent__c}
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isImage}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    <div class="slds-chat-message__video" style="max-width: 25vw;">
+                                                        <img src={message.MediaLink__c} alt="Media content"
+                                                                    class="slds-chat-message__media" />
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isVideo}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    <div class="slds-chat-message__video">
+                                                        <video src={message.MediaLink__c} alt="Media content"
+                                                            width="320" height="240" controls type="video/mp4"
+                                                            class="slds-chat-message__media"></video>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isAudio}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    <div class="slds-chat-message__audio">
+                                                        <audio src={message.MediaLink__c} alt="Media content"
+                                                            width="320" height="240" controls type="audio/m3"
+                                                            class="slds-chat-message__media"></audio>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isDocument}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    <div>
+                                                        <a href={message.MediaLink__c}>
+                                                            Document
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isButton}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    {message.TemplateButtonText__c}
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isTemplate}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    The Template With this Name has Been Shared:
+                                                    {message.TemplateName__c}
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isInteractive}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    The Template With this Name has Been Shared:
+                                                    {message.TemplateName__c}
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isReaction}>
+                                                <div class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                    {message.Reaction__c}
+                                                </div>
+                                            </template>
+                                            <div class="slds-chat-message__meta slds-chat-message__meta_outbound">
+                                                {message.SupportAgent__c} • {message.formattedDateTime}
+                                                <template if:true={message.isMessageSent}>
+                                                    <img src={sentTick} alt="" style="width: 17px; margin-left: 5px;">
+                                                </template>
+                                                <template if:true={message.isMessageDelivered}>
+                                                    <img src={deliveredTick} alt="" style="width: 17px; margin-left: 5px;">
+                                                </template>
+                                                <template if:true={message.isMessageRead}>
+                                                    <img src={readTick} alt="" style="width: 17px; margin-left: 5px;">
+                                                </template>
+                                                <template if:true={message.isMessageFailed}>
+                                                    <img src={failedTick} alt="" style="width: 17px; margin-left: 5px;">
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:true={message.isEndChat}>
+                                <div class="slds-chat-bookend slds-chat-bookend_stop endChatBookend">
+                                    <span class="slds-icon_container slds-icon-utility-end_chat slds-chat-icon">
+                                                <svg class="slds-icon slds-icon_x-small slds-icon-text-default"
+                                                    aria-hidden="true">
+                                                    <use
+                                                        xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#end_chat">
+                                                    </use>
+                                                </svg>
+                                            </span>
+                                    <p>Chat ended by
+                                        <b> {message.Owner.Name}</b> • {message.formattedDateTime}
+                                    </p>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- footer -->
+                <div class="footer-container">
+                    <div class="slds-grid slds-wrap slds-p-around_small footer">
+
+                        <div class="slds-col slds-m-top_xxx-small"
+                            style="position: absolute; max-height: 30px;display: flex; align-items: center; justify-content: center;">
+
+                            <template if:true={showAttechmentPopup}>
+                                <div class="popup-container popsCls">
+                                    <div class="attachment-container">
+
+
+
+
+                                        <template if:false={isSessionEnded}>
+
+                                            <div class="field slds-chat-message__text slds-chat-message__text_inbound att-item"
+                                                onclick={handleimageUpload}>
+                                                <input class="handle_image" type="file" accept="image/*"
+                                                            onchange={handleimageUpload}
+                                                            style="opacity:0; max-width:150px;"></input>
+                                                <label style="margin-left:-150px;cursor:pointer;" for="message">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" onclick={handleimageUpload} fill="currentColor" class="bi bi-card-image" viewBox="0 0 16 16">
+                                                                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                                                <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
+                                                            </svg>
+                                                            &nbsp;&nbsp;
+                                                                  Image</label>
+                                            </div>
+                                            <div class="field slds-chat-message__text video-div slds-chat-message__text_inbound  att-item"
+                                                onclick={handleVideoUpload}>
+                                                <input class="handle_image" type="file" accept="video/*"
+                                                            onchange={handleVideoUpload}
+                                                            style="opacity:0; max-width:150px;"></input>
+                                                <label style="margin-left:-150px; cursor:pointer;" for="email">
+                                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z"/>
+</svg>&nbsp;&nbsp;
+                                                               Video</label>
+
+                                            </div>
+                                            <div class="field slds-chat-message__text slds-chat-message__text_inbound  att-item"
+                                                onclick={handleAudioUpload}>
+                                                <input class="handle_image" type="file" accept="audio/*"
+                                                            onchange={handleAudioUpload}
+                                                            style="opacity:0; max-width:150px;"></input>
+                                                <label style="margin-left:-150px; cursor:pointer;" for="name">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-music-note-beamed" viewBox="0 0 16 16">
+  <path d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2"/>
+  <path fill-rule="evenodd" d="M14 11V2h1v9zM6 3v10H5V3z"/>
+  <path d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z"/>
+</svg>&nbsp;&nbsp; Audio</label>
+                                            </div>
+                                            <div class="field slds-chat-message__text slds-chat-message__text_inbound  att-item"
+                                                onclick={handlePdfUpload}>
+                                                <input class="handle_image" type="file"
+                                                            accept=".pdf,.html,.css,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.json,.xml,.csv/*"
+                                                            onchange={handlePdfUpload}
+                                                            style="opacity:0; max-width:150px"></input>
+                                                <label style="margin-left:-150px; cursor:pointer;" for="phone">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                            fill="currentColor" class="bi bi-file-earmark"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
+                                                        </svg>&nbsp;&nbsp;Document</label>
+
+                                            </div>
+                                        </template>
+
+                                        <div class="field slds-chat-message__text slds-chat-message__text_inbound  att-item"
+                                            onclick={handleTemplateUpload}>
+                                            <label for="phone" style="cursor:pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-plus" viewBox="0 0 16 16">
+  <path d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z"/>
+  <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
+</svg>&nbsp;&nbsp;
+                                                                
+                                                                Template</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <lightning-icon icon-name='utility:add' alternative-text='add' size='x-small' title='add'
+                                onclick={togglePopup} class="addIcon"></lightning-icon>
+
+                        </div>
+                    </div>
+                    <div style="padding-right:10px ;  cursor: pointer;">
+                        <c-Whatsapp-multi-image-sender record-id={recordId} business-number={businessNumber}
+                            phone-number={phoneNumber} customer-name={customerName}>
+                        </c-Whatsapp-multi-image-sender>
+                    </div>
+                    <div class="slds-col" style="padding-right:10px">
+                        <input type="text" class="slds-input send-input" name="name"
+                                    placeholder="Type message here..." style="color:black; max-width:100%;" onkeypress={callSendMethod}
+                                    oninput={handleIconSwitch} disabled={isSessionEnded}>
+                    </div>
+                    <template if:false={isSessionEnded}>
+
+                        <div class="slds-col" style="max-width:50px; display: flex; justify-content: center">
+                            <!-- <template if:true={switchIcon}>
+
+                                    <div class="circle" onclick={toggleActive}>
+                                        <img src={micIcon} alt="Microphone" style="width:20px; cursor:pointer" />
+                                    </div>
+
+                                </template>
+                                <template if:false={switchIcon}> -->
+                            <lightning-icon icon-name='utility:send' alternative-text='send' size='small' title='send'
+                                style="cursor:pointer" onclick={sendMessageHandler}>
+                            </lightning-icon>
+                            <!-- </template> -->
+                        </div>
+                        <div class="endChat">
+                            <button onclick={handleEndChat}>End Chat</button>
+                            <!-- <lightning-button variant="brand" label="End Chat" onclick={handleEndChat}></lightning-button> -->
+                        </div>
+                    </template>
+
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <template if:true={showEndChatPopup}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="add-heading">
+                    End Chat
+                </div>
+                <div class="slds-modal__content" id="modal-content-id-2">
+                    <div class="add-body">
+                        <!-- Subject -->
+                        <lightning-input type="text" label="Subject" class="subject" name="subject"></lightning-input>
+
+                        <!-- Status (Picklist) -->
+                        <lightning-combobox label="Status" name="status" class="status" options={statusOptions}
+                            value={isStatus} onchange={handleStatusChange}></lightning-combobox>
+
+                        <!-- Priority (Picklist) -->
+                        <lightning-combobox label="Priority" name="priority" class="priority" options={priorityOptions}
+                            value={isPriority} onchange={handlePriorityChange}></lightning-combobox>
+                    </div>
+                </div>
+                <div class="add-footer">
+                    <button class="btn-bare" aria-label="Cancel and close"
+                        onclick={handleEndChat}>Cancel</button>
+                    <button onclick={handleEndChatSave}>Save</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <template if:true={showTemplatePopup}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="add-heading">
+                    Templates
+                </div>
+                <div class="slds-modal__content" id="modal-content-id-3">
+                    <div class="add-body">
+                        <!-- Category (Picklist) -->
+                        <lightning-combobox name="categoryPicker" label="Select Category" value={selectedCategory}
+                            options={isTemplateCategory} onchange={handleCategoryChange}>
+                        </lightning-combobox>
+
+                        <!-- Show only if category is selected -->
+                        <template if:true={selectedCategory}>
+                            <lightning-combobox label="Template Type" style="width: 100%;" name="templateType"
+                                class="templateType" options={isTemplateOptions} value={isTemplateType}
+                                onchange={handleTemplateTypeChange}>
+                            </lightning-combobox>
+                        </template>
+
+                        <!-- Show only if template type is selected -->
+                        <template if:true={isTemplateType}>
+                            <lightning-combobox label="Template" name="template" class="template"
+                                options={istemplateName} value={isTemplate} onchange={handleTemplateChange}
+                                style="width: 100%;">
+                            </lightning-combobox>
+                        </template>
+
+                    </div>
+                </div>
+                <div class="add-footer">
+                    <button class="btn-bare" aria-label="Cancel and close"
+                        onclick={handleTemplateClose}>Cancel</button>
+                    <button onclick={handleSendTemplate}>Send</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+</template>

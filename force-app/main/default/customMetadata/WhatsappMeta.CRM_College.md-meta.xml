@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>CRM College</label>
+    <protected>false</protected>
+    <values>
+        <field>AccessToken__c</field>
+        <value xsi:type="xsd:string">EAAOFhGXyhz4BOy7VDorJg3nW8tZBkeJXaGvW63EHPEjJOcYk9HGflZCEHVZCIoXdwzsBPNqcR5MeNytDMw0p95NA8NphHtp9vuk7lynXO3HoHmPaJF7R7gPpL3DsUuEOZANUmTdibSEFSGr0LxGxT18x9R6hUtBhwEJRpBwMk5cpZBAPkZCQxHq7E8bnzcEVft8AZDZD</value>
+    </values>
+    <values>
+        <field>Business_Number__c</field>
+        <value xsi:type="xsd:string">917877251514</value>
+    </values>
+    <values>
+        <field>Is_Active__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Meta_URL__c</field>
+        <value xsi:type="xsd:string">https://graph.facebook.com/</value>
+    </values>
+    <values>
+        <field>PhoneNumber_Id__c</field>
+        <value xsi:type="xsd:string">716383438214260</value>
+    </values>
+    <values>
+        <field>Version__c</field>
+        <value xsi:type="xsd:string">v22.0</value>
+    </values>
+    <values>
+        <field>WABA_Id__c</field>
+        <value xsi:type="xsd:string">490308664171285</value>
+    </values>
+</CustomMetadata>

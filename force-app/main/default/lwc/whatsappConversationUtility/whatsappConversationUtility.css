@@ -1,0 +1,752 @@
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  width: 300px;
+  font-family: "Arial", sans-serif;
+  color: #333;
+}
+
+.highlight-parent {
+    outline: 2px solid #0070d2;
+    border-radius: 4px;
+    background-color: #e5f2ff;
+    transition: background-color 0.3s ease;
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 buttons per row */
+  gap: 12px;
+  /* space between buttons */
+  margin-top: 16px;
+}
+
+.no-records{
+  height: 60vh;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+}
+
+
+.yes {
+  background-color: #e0f0ff;
+  color: #007bff;
+}
+
+
+.whatsapp {
+  height: 70vh;
+  background-color: #fff;
+}
+
+.slds-chat-list {
+  min-height: 64vh;
+  overflow-y: auto;
+}
+
+.slds-template_default {
+  background-color: #fff !important;
+}
+
+
+.contacts-list {
+  /* height: 67.5vh; */
+  border-top: 2px solid black;
+  -ms-overflow-style: none;
+  padding-top: 5px;
+  margin-right: 5px;
+}
+
+
+.contacts-list ul {
+  overflow-x: auto;
+  height: 58vh;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.bottom-nav {
+  background-color: #FFF;
+  height: 70px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.slds-chat-message__header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.slds-chat-bookend {
+  margin: 0 5px;
+  font-size: large;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 55px;
+}
+
+.endChatBookend {
+  box-shadow: none !important;
+  gap: 9px;
+  border-radius: 0;
+  font-size: small;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
+.slds-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.slds-chat-message__text_inbound,
+.slds-chat-message__text_outbound {
+  /* box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important; */
+}
+
+.popup-container .slds-chat-message__text_inbound,
+.popup-container .slds-chat-message__text_outbound {
+  /* box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important; */
+  display: flex;
+  cursor: pointer;
+  justify-content: flex-start;
+  min-width: 150px;
+}
+
+.slds-chat-message__text_inbound {
+  background-color: #e5e5e5;
+}
+
+.slds-chat-message__meta_outbound {
+  text-align: right;
+}
+
+.single-contact {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 60px;
+  padding: 5px;
+  transition: 0.2s;
+  border-bottom: 1px solid lightgrey;
+  /* border-radius: 15px; */
+}
+
+.active-contact {
+  background-color: #0e9594;
+  border-color: #0e9594;
+  color: white;
+}
+
+.add-footer {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  padding: 0 10px;
+  align-items: center;
+  height: 50px;
+  border-top: 1px solid #6a7175;
+}
+
+.custom-button {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button:hover {
+  background-color: black;
+  color: white;
+}
+
+.single-contact:hover {
+  cursor: pointer;
+  background-color: #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  color: rgb(0, 0, 0);
+}
+
+.slds-has-dividers_bottom li:hover {
+  transform: scale(1.002);
+  cursor: pointer;
+}
+
+.contact-info {
+  margin-left: 10px;
+
+}
+
+.agentView {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    text-align: center;
+    margin: 8px 0 8px auto;
+    transition: background-color 0.3s ease;
+}
+
+.agentView.active {
+    background-color: #3ddc84;
+    color: white;
+}
+
+.agentView.inactive {
+    background-color: white;
+    color: transparent; /* hides 0 visually */
+    border: 1px solid #ccc;
+}
+/* Add smooth transitions for list items */
+.single-contact {
+    transition: all 0.3s ease;
+    opacity: 1;
+}
+
+/* Loading state styling */
+.single-contact.is-loading {
+    opacity: 0.6;
+    transform: translateX(5px);
+}
+
+/* New item highlight */
+.single-contact.is-new {
+    animation: highlight 1.5s ease-out;
+}
+
+@keyframes highlight {
+    0% { background-color: rgba(0, 95, 178, 0.1); }
+    100% { background-color: transparent; }
+}
+
+
+.profile-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background: #6a7175;
+  color: #FFF;
+  border-radius: 100%;
+  overflow: hidden;
+}
+
+.slds-chat-bookend .profile {
+  margin-right: 5px;
+}
+
+.profile img {
+  border-radius: 50%;
+}
+
+.slds-chat-message__body {
+  margin-top: 10px;
+}
+
+.slds-chat-message__body p {
+  background-color: #f4f6f9;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
+
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 4px;
+}
+
+.footer {
+  display: flex;
+  max-height: 57px;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+
+.footer-container {
+  display: flex;
+  max-height: 57px;
+  align-items: center;
+  justify-content: center;
+}
+
+.endChat .custom-button {
+  width: 80px;
+  padding: 0px 12px;
+}
+
+.popup-container {
+  position: absolute;
+  bottom: 30px;
+  left: 5px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  transform: translateY(10px);
+  transition: opacity 1s ease, transform 1s ease;
+  z-index: 999;
+
+  border: 1px solid lightgrey;
+}
+
+.popup-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.popup-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.popup-item:hover {
+  background-color: #f4f4f4;
+}
+
+.customer-details {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Convesation-Details {
+  position: relative;
+}
+
+.dotIcon {
+  position: relative;
+  z-index: 2;
+  /* Ensure it stays on top of the popup */
+}
+
+.ConvesationPopup {
+  width: 170px;
+  position: absolute;
+  top: 30px;
+  height: auto;
+  background-color: #FFF;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  right: 0;
+  font-size: 12px;
+  border-radius: 8px;
+  cursor: default;
+}
+
+.convo-item {
+  background: none;
+  border-radius: 0;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-heading {
+  width: 100%;
+  display: flex;
+  /* text-align: center; */
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  border-bottom: 1px solid #6a7175;
+  color: #000;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.add-body {
+  width: 100%;
+  padding: 10px;
+}
+
+.attachment-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+
+.card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+  text-align: center;
+}
+
+.card .field {
+  margin-bottom: 15px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.card .field label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.addIcon {
+  position: fixed;
+  cursor: pointer;
+}
+
+.card .field span,
+.card .field lightning-input,
+.card .field lightning-textarea {
+  display: block;
+  font-size: 1rem;
+  color: #333;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.business-details {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.business-details .addIconContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-input {
+  padding: 5px;
+  border-radius: 8px;
+  border: 1px solid #535353;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+}
+
+.icon-container {
+  background-color: #0e9594;
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #FFF;
+  cursor: pointer;
+}
+
+.contact-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.Add-contact-popup {
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+
+
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  transition: 0.5s;
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12),
+    0 3px 5px -1px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.circle img {
+  width: 40px;
+  height: 40px;
+  transition: 0.9s;
+}
+
+lightning-icon {
+  cursor: pointer;
+}
+
+.circle.active {
+  background: #ff0000;
+}
+
+.circle.active:before {
+  content: '';
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  opacity: 0.2;
+  z-index: -1;
+  position: absolute;
+  background: gray;
+  animation: bounce 0.8s ease-in-out infinite 0.5s;
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.4);
+  }
+
+  75% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.3);
+  }
+}
+
+
+.display-none {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0px !important;
+  width: 0px !important;
+  opacity: 0 !important;
+}
+
+@media (max-width: 480px) {
+  .slds-welcome {
+    display: none;
+  }
+
+  .contacts-section {
+    min-width: 100%;
+  }
+
+  .footer-container {
+    height: fit-content;
+    justify-content: space-evenly;
+  }
+
+  .contacts-list ul {
+    height: 82.5vh;
+  }
+
+  .single-contact {
+    max-width: none;
+  }
+
+  .chat-section {
+    min-width: 100%;
+  }
+
+  .slds-chat-list {
+    min-height: 81vh;
+  }
+
+  .send-input-container {
+    width: 38%;
+  }
+
+  .slds-m-top_xxx-small {
+    justify-content: space-evenly;
+  }
+
+  .endChat .custom-button {
+    width: 100px;
+    padding: 0 10px;
+  }
+
+  .ConvesationPopup {
+    width: 40vw;
+  }
+
+  .footer-container {
+    padding-top: 7px;
+  }
+
+  .chat-section section {
+    height: 81vh;
+  }
+
+  .whatsapp {
+    height: 100vh;
+  }
+
+}
+
+
+
+/* styles by Harshit */
+.header-regin {
+  background-color: none;
+  width: 100%;
+  border-radius: 0;
+  padding: 0 5px;
+  padding-bottom: 5px;
+}
+
+.buss-name {
+  font-size: 16px;
+  font-weight: 550;
+}
+
+.att-item {
+  background: none;
+  border-radius: 0;
+  padding: 10px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.att-item:hover {
+  background-color: #dfdfdf;
+  border-radius: 0;
+  padding: 10px;
+}
+
+label {
+  cursor: pointer;
+}
+
+button {
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #0e9594;
+  padding: 10px;
+  margin: 0 5px;
+  font-size: 12px;
+  background-color: #0e9594;
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-bare {
+  background-color: #c2c2c2;
+  color: #000;
+  border-color: #c2c2c2;
+}
+
+@media (max-width:600px) {
+  .contacts-list ul {
+    height: 75vh;
+  }
+}
+
+ /* side screen css */
+
+ .side-panel {
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+    overflow-y: auto;
+}
+
+
+.slds-badge.slds-theme_error {
+    background-color: #ff0000;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.slds-box {
+    border-radius: 0.25rem;
+}
+
+.slds-text-heading_small {
+    font-size: 1rem;
+    /* font-weight: bold; */
+}
+
+.slds-text-body_regular {
+    font-size: 0.875rem;
+}
+
+
+.custom-tab-nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.custom-tab-nav li {
+    flex: 0;
+    text-align: center;
+}
+
+/* componentName.css */
+.custom-user-icon lightning-icon svg {
+    fill: #707070; /* or any other gray tone */
+}
+
+/* .slds-pill {
+    background-color: #f3f2f2;
+    border-radius: 1rem;
+    padding: 0.25rem 0.75rem;
+    display: inline-flex;
+    align-items: center;
+} */

@@ -1,0 +1,314 @@
+<template>
+    <div if:true={isLoading} class="slds-is-relative" style="z-index: 9999;">
+        <lightning-spinner alternative-text="Loading..." variant="brand" class="slds-is-fixed">
+        </lightning-spinner>
+    </div>
+    <lightning-card>
+        <div class="container slds-p-around_medium">
+            <div class="slds-card__header slds-grid slds-grid_align-spread slds-p-around_medium">
+                <div class="header-content">
+                    <lightning-icon icon-name='action:announcement' alternative-text='announcement' size='small'
+                        title='announcement'></lightning-icon>
+                    <div class="slds-text-heading_small template-title">{templateName}</div>
+                    <div class="slds-text-body_small language">{selectedLanguageLabel} (JAM)
+                    </div>
+                    <br/>
+                    <div class="slds-text-body_small language">
+                        <!-- Marketing.Custom -->
+                        {templateTypeName}.{templateType}
+                    </div>
+                </div>
+            </div>
+            <!-- First Image Content -->
+            <div class="template-section slds-box slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium slds-m-bottom_small">Template Configuration</h2>
+
+                <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                    <div class="slds-col slds-large-size_6-of-12 slds-medium-size_12-of-12 slds-size_12-of-12">
+                        <lightning-input label="Template Name" value={templateName} required
+                            onchange={handleTemplateNameChange}>
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-large-size_6-of-12 slds-medium-size_12-of-12 slds-size_12-of-12">
+                        <lightning-combobox label="Language" value={selectedLanguage} options={languages}
+                            onchange={handleLanguageChange}>
+                        </lightning-combobox>
+                    </div>
+                </div>
+
+                <div class="headercontainer">
+                    <div class="section">
+                        <h2 class="section-title">Content</h2>
+                        <p class="section-subtitle">Fill in the header, body and footer sections of your template.</p>
+
+                        <!-- Variable -->
+                        <div class="form-row">
+                            <label class="form-label">Variable</label>
+                            <select class="form-select">
+                    <option value="">Number</option>
+                </select>
+                        </div>
+
+                        <!-- Header -->
+                        <div class="form-row">
+                            <label class="form-label">Header (Optional)</label>
+                            <select class="form-select" onchange={handleHeaderChange}>
+                                <option value="None"> None</option>
+                                <option value="Text">📝 Text</option>
+                                <option value="Image">🖼️ Image</option>
+                                <!-- <option value="Video">📹 Video</option>
+                                <option value="Document">📄 Document</option>
+                                <option value="Location"> 🌐 Location</option> -->
+                            </select>
+                        </div>
+
+                        <!-- Text Field -->
+                        <template if:true={showTextField}>
+                            <div class="form-row">
+                                <label class="form-label">Enter header text</label>
+                                <input type="text" class="form-input" placeholder="Enter header text" onchange={handleHeaderTextChange}/>
+                            </div>
+                        </template>
+
+                        <!-- Image Uploader -->
+                        <template if:true={showImageUploader}>
+                            <div class="form-row">
+                                <label class="form-label">Upload image</label>
+                                <input type="file" accept="image/*"  onchange={handleFileChange} class="form-input" />
+                            </div>
+                        </template>
+
+                        <!-- Video Uploader -->
+                        <template if:true={showVideoUploader}>
+                            <div class="form-row">
+                                <label class="form-label">Upload video</label>
+                                <input type="file" accept="video/*" onchange={handleFileChange} class="form-input" />
+                            </div>
+                        </template>
+
+                        <!-- Document Uploader -->
+                        <template if:true={showDocumentUploader}>
+                            <div class="form-row">
+                                <label class="form-label">Upload document</label>
+                                <input type="file" accept=".pdf,.doc,.docx,.txt" onchange={handleFileChange} class="form-input" />
+                            </div>
+                        </template>
+                        <!-- <lightning-button variant="brand" label="Upload to Facebook" class="slds-m-top_medium"
+                            onclick={uploadToFacebook} disabled={isUploading}>
+                        </lightning-button> -->
+                        <template if:true={isUploading}>
+                            <p class="slds-m-top_small">Uploading, please wait...</p>
+                        </template>
+                        <template if:true={uploadResult}>
+                            <p class="slds-m-top_small">Upload Result: {uploadResult}</p>
+                        </template>
+                        
+                        <div class="form-row">
+                            <label class="form-label">Body</label>
+                            <lightning-textarea label="Enter Body" value={bodyText} onchange={handleBodyChange}>
+                            </lightning-textarea>
+                        </div>
+                        <!-- Body Content -->
+                        <div class="form-row">
+                            <label class="form-label">Samples for body content</label>
+                            <p class="note">
+                                To help us review your message template, please add an example for each variable in your
+                                body text.
+                            </p>
+                            <template if:true={inputFields.length}>
+                                <template for:each={inputFields} for:item="field" for:index="index">
+                                    <lightning-input key={field} label={field.label} data-index={index}
+                                        value={field.value} onchange={handleInputChange} class="slds-m-top_small">
+                                    </lightning-input>
+                                </template>
+                            </template>
+                            <template if:true={showError}>
+                                <div class="error-box slds-m-top_medium slds-text-color_error">
+                                    <span class="error-icon">⚠</span> Add sample text
+                                </div>
+                            </template>
+                        </div>
+
+
+                        <!-- Footer -->
+                        <div class="form-row">
+                            <label class="form-label">Footer (Optional)</label>
+                            <input type="text" value={footervalue}  onchange={handlechangefooter} class="form-input" maxlength="60" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="template-section slds-box slds-m-bottom_medium">
+                <div class="quick-reply-container slds-p-around_medium">
+                    <h2 class="slds-text-heading_medium slds-m-bottom_small">Buttons. Optional</h2>
+
+                    <div class="slds-m-bottom_medium">
+                        <lightning-button label="Add button" variant="neutral" onclick={showButtonTypes}
+                            class="slds-m-top_small">
+                        </lightning-button>
+
+                        <template if:true={showDropdown}>
+                            <div class="slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+                                <div class="slds-dropdown slds-dropdown_center">
+                                    <ul class="slds-dropdown__list" role="menu">
+                                        <li class="slds-dropdown__item" role="presentation">
+                                            <a role="menuitem" onclick={addCustomfield}>
+                                                <span class="slds-truncate">Custom <br />
+                                    <span>___________</span>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="slds-dropdown__item" role="presentation">
+                                            <a role="menuitem" onclick={addWebsiteButton}>
+                                                <span class="slds-truncate">Visit website</span>
+                                            </a>
+                                        </li>
+                                        <li class="slds-dropdown__item" role="presentation">
+                                            <a role="menuitem" onclick={addPhoneButton}>
+                                                <span class="slds-truncate">Call Phone Number</span>
+                                            </a>
+                                        </li>
+                                        <li class="slds-dropdown__item" role="presentation">
+                                            <a role="menuitem" onclick={addOfferCodeButton}>
+                                                <span class="slds-truncate">Copy offer code</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div>
+                        <template if:true={visbleCall}>
+                            <span style="font-size:16px;" class="slds-float_left">Call to action • Optional</span><br/>
+
+                        </template>
+                    </div>
+                    <div class="buttons-container">
+                        <template for:each={buttons} for:item="button" for:index="index">
+                            <div key={button.id} class="button-item slds-box slds-m-bottom_small">
+                                <div class="slds-grid slds-wrap">
+                                    <template if:true={button.isWebsite}>
+                                        <div
+                                            class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                                            <lightning-combobox name="urlType" label="URL type" value={button.urlType}
+                                                options={urlTypes} onchange={handleUrlTypeChange} data-index={index}>
+                                            </lightning-combobox>
+                                        </div>
+
+                                         <div
+                                            class="slds-col slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-size_8-of-12 slds-m-left_x-small">
+                                            <lightning-input type="text" label="Button text" value={button.text}
+                                                onchange={handleButtonTextChange} data-index={index}>
+                                            </lightning-input>
+                                        </div>
+                                        
+                                        <div
+                                            class="slds-col slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-size_8-of-12 slds-m-left_x-small">
+                                            <lightning-input type="url" label="Website URL" value={button.url}
+                                                onchange={handleUrlChange} data-index={index}>
+                                            </lightning-input>
+                                        </div>
+                                        <div
+                                            class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                            <a>
+                                                <lightning-icon icon-name='utility:close' onclick={removeButton}
+                                                    data-index={index} alternative-text='close' size='Medium'
+                                                    title='close'
+                                                    class="slds-float_right slds-m-top_large slds-m-left_small">
+                                                </lightning-icon>
+                                            </a>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={button.isPhone}>
+                                        <div
+                                            class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                                            <lightning-combobox name="country" label="Country" value={button.country}
+                                                options={countries} onchange={handleCountryChange} data-index={index}>
+                                            </lightning-combobox>
+                                        </div>
+
+                                          <div
+                                            class="slds-m-left_x-small slds-col slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-size_8-of-12">
+                                            <lightning-input type="text" placeholder="Button text" label="Button Text" value={button.text}
+                                                onchange={handlebuttonTextpChange} data-index={index}>
+                                            </lightning-input>
+                                        </div>
+                                        <div
+                                            class="slds-m-left_x-small slds-col slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-size_8-of-12">
+                                            <lightning-input type="tel" placeholder="9876543210" label="Phone number" value={button.phone}
+                                                onchange={handlePhoneChange} data-index={index}>
+                                            </lightning-input>
+                                        </div>
+                                        <div
+                                            class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                            <a>
+                                                <lightning-icon icon-name='utility:close' onclick={removeButton}
+                                                    data-index={index} alternative-text='close' size='Medium'
+                                                    title='close'
+                                                    class="slds-float_right slds-m-top_large slds-m-left_small">
+                                                </lightning-icon>
+                                            </a>
+                                        </div>
+                                    </template>
+                                    <template if:true={button.isOffer}>
+                                        <div
+                                            class="slds-m-left_x-small slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                                            <lightning-input type="text" label="Button Text" value="Copy Offer Code"
+                                                disabled>
+                                            </lightning-input>
+                                        </div>
+                                        <div
+                                            class="slds-m-left_x-small slds-col slds-large-size_8-of-12 slds-medium-size_8-of-12 slds-size_8-of-12">
+                                            <lightning-input type="tel" label="Offer Code" value={button.Code}
+                                                onchange={handleOfferCodeChange} data-index={index}>
+                                            </lightning-input>
+                                        </div>
+                                        <div
+                                            class="slds-col slds-large-size_1-of-12 slds-medium-size_1-of-12 slds-size_1-of-12">
+                                            <a>
+                                                <lightning-icon icon-name='utility:close' onclick={removeButton}
+                                                    data-index={index} alternative-text='close' size='Medium'
+                                                    title='close'
+                                                    class="slds-float_right slds-m-top_large slds-m-left_small">
+                                                </lightning-icon>
+                                            </a>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <template if:true={visibleQuick}>
+                        <span style="font-size:16px;" class="slds-float_left">Quick reply • Optional</span><br/>
+                    </template>
+                    <div class="buttons-container">
+                        <template for:each={customfields} for:item="btn" for:index="index">
+                            <div key={btn.id} class="button-item slds-box slds-m-bottom_small">
+                                <div class="slds-grid slds-wrap">
+                                    <div
+                                        class="slds-col slds-large-size_10-of-12 slds-medium-size_10-of-12 slds-size_10-of-12">
+                                        <lightning-input type="text" label="Button text" value={btn.text}
+                                            onchange={handleTextChange} data-index={index}>
+                                        </lightning-input>
+                                    </div>
+                                    <div
+                                        class="slds-col slds-large-size_2-of-12 slds-medium-size_2-of-12 slds-size_2-of-12">
+                                        <a>
+                                            <lightning-icon icon-name='utility:close' onclick={removeCustomButton}
+                                                data-index={index} alternative-text='close' size='Medium' title='close'
+                                                class="slds-m-left_xx-large slds-m-top_medium slds-m-left_small">
+                                            </lightning-icon>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+    <p>Dynamic JSON{state}</p>
+</template>

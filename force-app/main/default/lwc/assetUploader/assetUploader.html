@@ -1,0 +1,72 @@
+<template>
+   <template if:true={isAllowed}>
+ <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+    <div class="uploader-container">
+        <div class="uploader-header">
+            <h2>Image Uploader</h2>
+            <div class="header-accent"></div>
+        </div>
+
+        <div class="uploader-body">
+            <!-- Library Selector -->
+            <div class="select-container">
+                <label>Select Asset Library</label>
+                <select value={selectedLibrary} onchange={handleLibraryChange} class="library-select">
+                    <option value="">Choose a library</option>
+                    <template for:each={libraryOptions} for:item="option">
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    </template>
+                 </select>
+                <div class="select-arrow">▼</div>
+            </div>
+
+            <!-- File Drop Zone -->
+            <template if:true={isUploadVisible}>
+                <div class="drop-zone" ondrop={handleDrop} ondragover={handleDragOver} ondragleave={handleDragLeave}>
+                    <input type="file" id="fileInput" accept="image/*" multiple onchange={handleFilesChange}>
+                    <label for="fileInput" class="drop-label">
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                        </svg>
+                    </div>
+                    <h3>Select or Drop Images</h3>
+                    <!-- <p>Minimum 50 images (max 50 allowed)</p> -->
+                    <div class="browse-button">Browse Files</div>
+                </label>
+                </div>
+            </template>
+            <!-- File Count -->
+            <template if:true={filesToUpload.length}>
+                <div class="file-count">
+                    <div class="count-display">
+                        <span>{filesToUpload.length}</span> images selected
+                        <!-- <span class="max-count">/50</span> -->
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style={progressWidth}></div>
+                    </div>
+                </div>
+
+                <button
+                    onclick={uploadFiles}
+                    class="upload-button">
+                    Upload Images
+                </button>
+
+            </template>
+
+            <!-- Upload Button -->
+            <!-- Upload Status -->
+            <template if:true={uploading}>
+                <div class="upload-status">
+                    <div class="spinner"></div>
+                    <span>Uploading {uploadedCount}/{filesToUpload.length} images...</span>
+                </div>
+            </template>
+        </div>
+    </div>
+   </template>
+</template>

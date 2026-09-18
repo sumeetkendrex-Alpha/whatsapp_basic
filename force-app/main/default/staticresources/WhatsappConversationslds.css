@@ -1,0 +1,24 @@
+.slds-template_default{
+  background-color: #fff !important;
+}
+
+.combox-container .slds-form-element__label{
+	display: none !important;
+}
+
+.combox-container .combobox{
+	display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.combox-container .slds-form-element__control{
+	width:90% !important;
+	border-radius: 20px !important;
+	height: 36px !important
+}
+
+.forceAccess .footer {
+    margin: 10px;
+}
+

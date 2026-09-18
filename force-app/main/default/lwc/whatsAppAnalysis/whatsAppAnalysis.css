@@ -1,0 +1,265 @@
+.slds-template_default,
+.slds-template--default {
+  background-color: #F4F6F9 !important;
+
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.message-analysis {
+  margin-bottom: 20px;
+}
+
+.messsage-analysis-sub1 {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.sub1-box {
+  border: 2px solid #0E9594;
+  width: 100%;
+  height: 95px;
+  border-radius: 5px;
+  padding: 5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.messsage-analysis-sub2 {
+  display: flex;
+  gap: 10px;
+}
+
+.sub2-box-1 {
+  border: 2px solid #0E9594;
+  width: 60%;
+  height: 400px;
+  border-radius: 5px;
+}
+
+.sub2-box-2 {
+  border: 2px solid #0E9594;
+  width: 40%;
+  height: 400px;
+  border-radius: 5px;
+}
+
+.template-analysis-sub1 {
+  display: flex;
+  gap: 10px;
+
+}
+
+.sub3-box-1 {
+  border: 2px solid #0E9594;
+  width: 70%;
+  height: 50px;
+  border-radius: 5px;
+  height: 400px;
+}
+
+.sub3-box-2 {
+  border: 2px solid #0E9594;
+  width: 30%;
+  height: 50px;
+  border-radius: 5px;
+  height: 400px;
+  overflow: hidden;
+}
+
+.card {
+  padding: 15px;
+  font-family: 'Salesforce Sans', Arial, sans-serif;
+  background-color: #fff;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.header {
+  margin-bottom: 10px;
+}
+
+.line {
+  width: 16px;
+  height: 2px;
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.label {
+  flex-grow: 1;
+  font-size: 14px;
+}
+
+.count {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.purple {
+  background-color: #6a1b9a;
+}
+
+.cyan {
+  background-color: #00bcd4;
+}
+
+.pink {
+  background-color: #e91e63;
+}
+
+.orange {
+  background-color: #ff5722;
+}
+
+.brown {
+  background-color: #5d4037;
+}
+
+.green {
+  background-color: #4caf50;
+}
+
+.info-icon {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.icon-cls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #0E9594;
+  color: #ffffff;
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom-left-radius: 18px;
+}
+
+.viewInsigntButton {
+  background-color: #e8f0fe;
+  color: #1a73e8;
+  font-weight: bold;
+  /* font-family: Arial, sans-serif; */
+  /* font-size: 14px; */
+  padding: 4px 6px;
+  border: none;
+  /* border-radius: 8px; */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.viewInsigntButton:hover {
+  background-color: #d2e3fc;
+
+}
+
+
+
+/*media query  Start from here*/
+
+@media only screen and (max-width: 768px) {
+  .messsage-analysis-sub1 {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .sub1-box {
+    width: calc(50% - 15px);
+    height: auto;
+    padding: 10px 5px;
+  }
+  
+  .messsage-analysis-sub2 {
+    flex-direction: column;
+  }
+  
+  .sub2-box-1,
+  .sub2-box-2 {
+    width: 100%;
+  }
+  
+  .template-analysis-sub1 {
+    flex-direction: column;
+  }
+  
+  .sub3-box-1,
+  .sub3-box-2 {
+    width: 100%;
+  }
+  
+  /* Adjust table font sizes for mobile */
+  .slds-table th,
+  .slds-table td {
+    font-size: 12px;
+    padding: 4px;
+  }
+  
+  /* Make date inputs stack vertically */
+  .sub1-box lightning-input {
+    width: 100%;
+  }
+  
+  /* Adjust card layout */
+  .card .row {
+    flex-wrap: wrap;
+  }
+  
+  .card .count {
+    width: 100%;
+    text-align: left;
+    padding-left: 24px; /* Match the line + margin */
+    font-size: 16px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .sub1-box {
+    width: 100%; /* Single column on very small screens */
+  }
+  
+  /* Further reduce table font sizes */
+  .slds-table th,
+  .slds-table td {
+    font-size: 11px;
+  }
+  
+  /* Adjust button size */
+  .viewInsigntButton {
+    padding: 2px 4px;
+    font-size: 12px;
+  }
+  
+  /* Adjust icon size in boxes */
+  .icon-cls {
+    height: 25px;
+    width: 25px;
+    border-bottom-left-radius: 12px;
+  }
+  
+  /* Reduce padding in containers */
+  .slds-p-around_medium {
+    padding: 8px;
+  }
+}

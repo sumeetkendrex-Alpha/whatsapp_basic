@@ -1,0 +1,11 @@
+.redirect .slds-icon-utility-forward-up{
+	--sds-c-icon-color-foreground-default: #fff !important;
+}
+
+.redirect .slds-icon__container{
+	--sds-c-icon-color-foreground-default: #fff !important;
+}
+
+.redirect .slds-icon-utility-forward-up.slds-icon_container{
+	--sds-c-icon-color-foreground-default: #fff !important;
+}

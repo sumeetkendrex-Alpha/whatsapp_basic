@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Template_Type__c</fullName>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Template Type</label>
+    <required>true</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Promotion</fullName>
+                <default>false</default>
+                <label>Promotion</label>
+            </value>
+            <value>
+                <fullName>Custom</fullName>
+                <default>false</default>
+                <label>Custom</label>
+            </value>
+            <value>
+                <fullName>Catalog</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Catalog</label>
+            </value>
+            <value>
+                <fullName>Flows</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Flows</label>
+            </value>
+            <value>
+                <fullName>Order Details</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Order Details</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

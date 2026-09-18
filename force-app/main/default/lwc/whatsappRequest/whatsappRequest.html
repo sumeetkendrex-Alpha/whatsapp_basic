@@ -1,0 +1,38 @@
+<template>
+	<div class="conversation-container">
+		<h2 class="conversation-heading slds-text-heading_small">New Messages from WhatsApp</h2>
+
+		<table class="conversation-table">
+			<tbody>
+				<template for:each={conversations} for:item="conversation" for:index="index">
+					<tr key={conversation.Id}>
+						<td>
+							<div class="conversation-info" style="display: flex; margin: 2px;">
+								<div class="info-icon">
+										<lightning-icon icon-name="standard:user" size="small" alternative-text="Unread message"></lightning-icon>
+								</div>
+								<div class="info-text" style="margin-left: 10px;">
+										<span style="font-size: large; cursor: pointer;">{conversation.CustomerName__c}</span>
+									<br />
+									<span class="fontc" style="padding: 0px;">{conversation.CustomerPhone__c}</span> <br />
+									<span style="padding: 0px; font-size: 11px; color: red;">{conversation.timeElapsed}</span>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="button-group">
+									<button class="accept-button" onclick={handleAccept} data-index={index} title="Create Lead">
+										<lightning-icon icon-name="utility:check" size="x-small"></lightning-icon>
+									</button>
+									<div class="button-space"></div>
+								<button class="accept-button redirect" onclick={handleRedirectToUser} data-index={index} title="Go to chat">
+									<lightning-icon icon-name="utility:forward_up" size="x-small" alternative-text="Redirect to chat"></lightning-icon>
+								</button>
+							</div>
+						</td>
+					</tr>
+				</template>
+			</tbody>
+		</table>
+	</div>
+</template>

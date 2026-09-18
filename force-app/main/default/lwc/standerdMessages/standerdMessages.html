@@ -1,0 +1,61 @@
+<template>
+
+    <lightning-button-icon icon-name="utility:info" alternative-text="Standard Message" title="Standard Message"
+        onclick={showModalBox} variant="brand">
+    </lightning-button-icon>
+
+    <template if:true={isShowModal}>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Standard Messages</h2>
+                </header>
+
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+                    <lightning-card title="Standard Messages">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Sr No</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={messages} for:item="msg">
+                                    <tr key={msg.Id}>
+                                        <td>
+                                            <input type="radio" name="msgRadio" value={msg.Id} onchange={handleSelection} />
+                                        </td>
+                                        <td>{msg.srNo}</td>
+                                        <td>{msg.Name__c}</td>
+                                        <td><span style="word-wrap">{msg.Description__c}</span></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </lightning-card>
+
+                </div>
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={handleSend}>Send</button>
+                    <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                </footer>
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+</template>

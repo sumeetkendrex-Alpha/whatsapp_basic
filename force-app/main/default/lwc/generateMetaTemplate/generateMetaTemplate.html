@@ -1,0 +1,294 @@
+<template>
+    <!-- modal start -->
+    <template if:true={isShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+
+                    <template if:true={modalOpen}>
+                        <div class="Header">Choose Template Category</div>
+                        <div class="radio custom-radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="category" value="Marketing"
+                                    onchange={handleChange}>Marketing</label>
+                            <label class="radio-option">
+                                <input type="radio" name="category" value="Utility"
+                                    onchange={handleUtility}>Utility</label>
+                            <label class="radio-option">
+                                <input type="radio" name="category" value="Authentication"
+                                    onchange={handleAuthentication}>Authentication</label>
+                        </div>
+                    </template>
+                    <template if:true={isCategory}>
+                        <div class="Header">{category}</div>
+                        <div class="Marketing">
+                            <div class="form-group">
+                                <div class="slds-p-around_medium lgc-bg">
+                                    <label for="nameInput" class="fontStyle">Name:</label>
+                                    <input type="text" name="name" onchange={handleNameChange}>
+                                    <br>
+                                    <br>
+                                    <label for="languageSelect" class="fontStyle">Language: {language}</label>
+                                    <br>
+                                    <label for="categorySelect" class="fontStyle">Category: {category}</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h2 class="fontStyle">Components</h2>
+                                <div class="slds-p-around_medium lgc-bg form-group">
+                                    <label for="formatInput" class="fontStyle">Header</label>
+                                    <label for="picklist">Choose an option:</label>
+                                    <select name="handleFormat" onchange={handleFormatChange}>
+                                        <option value="none">None</option>
+                                        <option value="TEXT">Text</option>
+                                        <option value="IMAGE">Image</option>
+                                        <option value="VIDEO">Video</option>
+                                        <option value="DOCUMENT">Document</option>
+                                        <option value="LOCATION">Location</option>
+                                    </select>
+                                    <br>
+                                    <br>
+                                    <template if:true={isTextSelected}>
+                                        <div style="margin-bottom:10px;">
+                                            <label for="text-input">Enter your text:</label>
+                                            <textarea name="headerText" onchange={handleFormatChange}></textarea>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={isImageSelected}>
+                                        <div class="item-container">
+                                            <div class="slds-form-element">
+                                                <label class="slds-form-element__label" for="image-upload">
+                                                    <lightning-icon icon-name="utility:image" alternative-text="Image"
+                                                        size="small"
+                                                        class="slds-icon slds-icon_small"></lightning-icon>Upload an
+                                                    image:</label>
+                                                <input type="file" onchange={handleMediaUpload} name="handleImageUpload"
+                                                    accept="image/*" class="slds-input">
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={isVideoSelected}>
+                                        <div class="item-container">
+                                            <div class="slds-form-element">
+                                                <label class="slds-form-element__label" for="video-upload">
+                                                    <lightning-icon icon-name="utility:video" alternative-text="Video"
+                                                        size="small" class="slds-icon slds-icon_small"></lightning-icon>
+                                                    Upload a video:
+                                                </label>
+                                                <input type="file" onchange={handleMediaUpload} accept="video/*"
+                                                    class="slds-input">
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template if:true={isDocumentSelected}>
+                                        <div class="item-container">
+                                            <div class="slds-form-element">
+                                                <label class="slds-form-element__label" for="document-upload">
+                                                    <lightning-icon icon-name="doctype:pdf" alternative-text="Document"
+                                                        size="small"
+                                                        class="slds-icon slds-icon_small"></lightning-icon>Upload a
+                                                    document:</label>
+                                                <input type="file" onchange={handleMediaUpload} accept=".pdf,.doc,.docx"
+                                                    class="slds-input">
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <div class="slds-p-around_medium lgc-bg form-group">
+                                    <label for="formatInput" class="fontStyle">Body:</label>
+                                    <textarea type="text" name="bodyText" onchange={handleBodyText} rows="4"
+                                        cols="50"></textarea>
+                                </div>
+
+
+                                <div class="slds-p-around_medium lgc-bg form-group">
+                                    <h3 class="fontStyle">Footer</h3>
+                                    <input type="text" name="bodyText" onchange={handleFooterText}>
+                                </div>
+
+                                <div class="form-group slds-p-around_medium lgc-bg">
+                                    <h3 class="fontStyle">Buttons</h3>
+
+
+                                    <div class="button-row ">
+                                        <button class="styled-button" name="buttonURLText"
+                                            onclick={handleAddCustom}>Custom</button>
+                                        <button class="styled-button" name="buttonURLText"
+                                            onclick={handleAddWebsite}>Visit Website</button>
+                                        <button class="styled-button" name="buttonURLText" onclick={handleAddPhone}>Call
+                                            Phone Number</button>
+                                        <button class="styled-button" name="buttonURLText" onclick={handleAddOffer}>Copy
+                                            Offer Code</button>
+                                    </div>
+
+
+                                    <div class="custom-section">
+                                        <template for:each={custom} for:item="contact" for:index="index">
+                                            <div key={contact.key} class="item-container">
+                                                <div>
+                                                    <label for="buttonName">Type Of Action</label>
+                                                    <input type="text" name="buttonName" class="custom-input"
+                                                        placeholder="Custom" data-index={index} readonly>
+                                                </div>
+                                                <div>
+                                                    <label for="buttonName">Button Text:</label>
+                                                    <input type="text" name="customButton" class="custom-input"
+                                                        placeholder="Button Name" onchange={handleCustomText}
+                                                        data-index={index}>
+                                                </div>
+
+                                                <div class="deleteBtn_Icn">
+                                                    <lightning-button-icon icon-name="utility:delete" data-index={index}
+                                                        onclick={handleRemoveCustom}>
+                                                    </lightning-button-icon>
+                                                </div>
+                                            </div>
+
+
+                                        </template>
+                                    </div>
+                                    <div class="website-section">
+                                        <template for:each={website} for:item="web" for:index="index">
+                                            <div key={web.key} class="item-container">
+                                                <div>
+                                                    <label for="typeOfAction">Type Of Action</label>
+                                                    <input type="text" name="typeOfAction" class="custom-input"
+                                                        placeholder="Visit Website" data-index={index} readonly>
+                                                </div>
+                                                <div>
+                                                    <label for="buttonText">Button Text:</label>
+                                                    <input type="text" name="buttonText" class="custom-input"
+                                                        placeholder="Button Text" data-index={index} value={web.text}
+                                                        onchange={handleWebsiteChange}>
+                                                </div>
+                                                <div>
+                                                    <label for="handleurltype">URL Type</label>
+                                                    <select class="picklisturl" name="handleurltype" data-index={index}
+                                                        onchange={handleWebsiteChange}>
+                                                        <option value="Static">Static</option>
+                                                        <option value="Dynamic">Dynamic</option>
+                                                    </select>
+
+                                                </div>
+                                                <div>
+                                                    <label for="websiteUrl">Website Url</label>
+                                                    <input type="text" name="websiteUrl" class="custom-input"
+                                                        placeholder="https://www.example.com" data-index={index}
+                                                        value={web.url} onchange={handleWebsiteChange}>
+                                                </div>
+
+                                                <div class="deleteBtn_Icn">
+                                                    <lightning-button-icon icon-name="utility:delete" data-index={index}
+                                                        onclick={handleRemoveWebsite}>
+                                                    </lightning-button-icon>
+                                                </div>
+
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="phone-section">
+                                        <template for:each={phnDetails} for:item="phn" for:index="index">
+                                            <div key={phn.key} class="item-container">
+                                                <div>
+                                                    <label for="buttonName">Type Of Action</label>
+                                                    <input type="text" name="callPhoneNumber" class="custom-input"
+                                                        placeholder="Call Phone Number" data-index={index} readonly>
+                                                </div>
+                                                <div>
+                                                    <label for="buttonName">Button Text:</label>
+                                                    <input type="text" name="phoneCountryText" class="custom-input"
+                                                        placeholder="Call Phone Number" onchange={handlePhoneChange}
+                                                        data-index={index}>
+                                                </div>
+
+                                                <div>
+                                                    <label>Country</label>
+                                                    <select class="picklisturl" name="handleCountryCode"
+                                                        onchange={handlePhoneChange}>
+                                                        <option value="+91">IN</option>
+
+                                                    </select>
+
+                                                </div>
+
+
+                                                <div>
+                                                    <label for="buttonName">Phone Number</label>
+                                                    <input type="text" name="phoneCountryNumber" class="custom-input"
+                                                        placeholder="Phone Number" data-index={index}
+                                                        onchange={handlePhoneChange}>
+                                                </div>
+
+                                                <div class="deleteBtn_Icn">
+                                                    <lightning-button-icon icon-name="utility:delete" data-index={index}
+                                                        onclick={handleRemovePhn}>
+                                                    </lightning-button-icon>
+                                                </div>
+
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="offer-section">
+                                        <template for:each={copyOffer} for:item="offer" for:index="index">
+                                            <div key={offer.key} class="item-container">
+                                                <div>
+                                                    <label for="buttonName">Type Of Action</label>
+                                                    <input type="text" name="offerSection" class="custom-input"
+                                                        placeholder="Copy Offer Code" data-index={index} readonly>
+                                                </div>
+                                                <div>
+                                                    <label for="buttonName">Button Text:</label>
+                                                    <input type="text" class="custom-input" placeholder="Button Text"
+                                                        data-index={index} disabled>
+                                                </div>
+                                                <div>
+                                                    <label for="buttonName">Offer Code:</label>
+                                                    <input type="text" class="custom-input" placeholder="Enter Sample"
+                                                        data-index={index} onchange={handleOfferChange}>
+                                                </div>
+
+                                                <div class="deleteBtn_Icn">
+                                                    <lightning-button-icon icon-name="utility:delete" data-index={index}
+                                                        onclick={handleRemoveOffer}>
+                                                    </lightning-button-icon>
+                                                </div>
+                                            </div>
+
+
+
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </template>
+
+                    <div class="footer">
+                        <template if:false={modalOpen}>
+                            <button class="slds-button slds-button_brand" aria-label="Cancel and close"
+                                onclick={handlePrevious}>Previous</button>
+                        </template>
+
+                        <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                            onclick={hideModalBox}>Cancel</button>
+                        <button class="slds-button slds-button_brand" onclick={handleSave}>Save</button>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+</template>

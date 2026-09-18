@@ -1,0 +1,5 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+     <aura:attribute name="recordId" type="Id"/>
+    <c:genrateMessageTemplateJson recordId="{!v.recordId}" />
+      <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+</aura:component>

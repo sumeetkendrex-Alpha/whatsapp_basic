@@ -1,0 +1,10 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/.sf": true,
+    "**/.sfdx": true
+  },
+  "salesforcedx-vscode-apex.java.home": "${env:JAVA_HOME}",
+  "xml.preferences.showSchemaDocumentationType": "none"
+}

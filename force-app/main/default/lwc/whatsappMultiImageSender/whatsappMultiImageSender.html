@@ -1,0 +1,95 @@
+<template>
+
+    <svg xmlns="http://www.w3.org/2000/svg" onclick={openModal} width="20" height="20" fill="#5c5c5c" class="bi bi-images"
+        viewBox="0 0 16 16">
+        <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
+        <path
+            d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2M14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1M2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1z" />
+    </svg>
+
+    <!-- <lightning-button label="Bulk Images" onclick={openModal}></lightning-button> -->
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Header -->
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Image Preview</h2>
+                </header>
+
+                <!-- Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+                     <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+
+
+                    <lightning-button label={buttonLabel} onclick={toggleDiv}></lightning-button> <br/>
+                    <br/>
+                    <!-- THis section is for local files computer -->
+                    <template if:true={isVisible}>
+                        <div class="slds-box slds-theme_default">
+                            <lightning-card title="Upload Images">
+                                <lightning-file-upload label="Upload Images" name="fileUploader"
+                                    accept={acceptableFileTypes} multiple record-id={recordId}
+                                    onuploadfinished={handleUploadFinished}>
+                                </lightning-file-upload>
+                            </lightning-card>
+                        </div>
+                        <div style="padding: 1rem;">
+                            <lightning-button label="Select All" onclick={selectAllImages}></lightning-button>
+                            <lightning-button variant="brand" label="Send Selected" onclick={handleSubmit}
+                                class="slds-m-left_small"></lightning-button>
+                        </div>
+                        <template for:each={images} for:item="img">
+                            <div key={img.id} class="image-card">
+                                <input type="checkbox" data-id={img.id} onchange={handleCheckboxChange} />
+                                <img src={img.url} alt={img.name} />
+                                <p>{img.name}</p>
+                            </div>
+                        </template>
+                    </template>
+
+                    <!-- This Below section is for salesforce Files -->
+                    <template if:false={isVisible}>
+                        <lightning-card title="Select a Library">
+                            <lightning-combobox name="library" label="Library" placeholder="Select a Library"
+                                options={libraryOptions} value={selectedLibraryId} onchange={handleLibraryChange}>
+                            </lightning-combobox>
+                        </lightning-card>
+
+                        <template if:true={images}>
+                            <lightning-card title="Select Images">
+                                <div style="padding: 1rem;">
+                                    <lightning-button label="Select All" onclick={selectAllImages}></lightning-button>
+                                    <lightning-button variant="brand" label="Send Selected" onclick={handleSubmit}
+                                        class="slds-m-left_small"></lightning-button>
+                                </div>
+
+                                <div class="image-grid">
+                                    <template for:each={images} for:item="img">
+                                        <div key={img.id} class="image-card">
+                                            <input type="checkbox" data-id={img.id} onchange={handleCheckboxChange} />
+                                            <img src={img.url} alt={img.name} />
+                                            <p>{img.name}</p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </lightning-card>
+                        </template>
+
+                        <template if:true={error}>
+                            <p class="slds-text-color_error">Error loading data.</p>
+                        </template>
+                    </template>
+                </div>
+
+                <!-- Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Close" onclick={closeModal}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>

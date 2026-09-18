@@ -1,0 +1,126 @@
+<template>
+    <template if:true={isDialogVisible}>
+        <!-- <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open"> -->
+            <!-- <div class="slds-modal__container"  style="width:50rem;">  -->
+                <!-- <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">Create Template</h2>
+                </header> -->
+                <div class="slds-modal__content">
+                    <!-- <template if:true={showChild}>
+                        <c-whatsapp-template-builder></c-whatsapp-template-builder>
+                    </template> -->
+                    <template if:false={showChild}>
+
+                        <lightning-card>
+                            <div class="container">
+                                <div class="header">
+                                    <span class="header-text">Set up your template</span>
+                                    <p> Choose the category that best describes your message template. Then, select the
+                                        type of message that you want to send.</p>
+                                    <div class="categories">
+                                        <div class={categoryMarketingClass} onclick={switchToMarketing}>
+                                            <span class="icon-text-container">
+                            <span class="nimbus--marketing icon"></span>
+                                            <span class="textclass">Marketing</span>
+                                            </span>
+                                        </div>
+                                        <div class={categoryUtilityClass} onclick={switchToUtility}>
+                                            <span class="icon-text-container">
+                            <span class="ic--round-notifications-active icon"></span>
+                                            <span class="textclass"> Utility</span>
+                                            </span>
+                                        </div>
+                                        <div class={categoryAuthClass} onclick={switchToAuth}>
+                                            <span class="icon-text-container">
+                            <span class="arcticons--passwords icon"></span>
+                                            <span class="textclass"> Authentication</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="learn-more">
+                                        <a href="#">Learn more about categories</a>
+                                    </div>
+                                </div>
+
+                                <div class="options-container">
+                                    <template if:true={isMarketingActive}>
+                                        <div class="option">
+                                            <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" checked={customChecked} onchange={handleCustomCheck}>
+                            <span class="checkmark"></span>
+                            <div class="label-content">
+                                <span class="main-label">Custom</span>
+                                <span class="description">Send promotions or announcements to increase awareness and engagement.</span>
+                            </div>
+                        </label>
+                                        </div>
+                                        <div class="option" aria-disabled="true">
+                                            <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" disabled>
+                            <span class="checkmark"></span>
+                            <div class="label-content">
+                                <span class="main-label">Catalogue</span>
+                                <span class="description">Send messages about your entire catalogue or multiple products from it.</span>
+                            </div>
+                        </label>
+                                        </div>
+                                        <div class="option" aria-disabled="true">
+                                            <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" disabled>
+                            <span class="checkmark"></span>
+                            <div class="label-content">
+                                <span class="main-label">Calling permissions request</span>
+                                <span class="description">Ask customers if you can call them on WhatsApp</span>
+                            </div>
+                        </label>
+                                        </div>
+                                    </template>
+                                    <template if:true={isUtilityActive}>
+                                        <div class="option">
+                                            <label class="checkbox-label">
+                        <input type="checkbox" class="custom-checkbox" checked={customChecked} onchange={handleCustomCheck}>
+                        <span class="checkmark"></span>
+                        <div class="label-content">
+                            <span class="main-label">Custom</span>
+                            <span class="description">Send promotions or announcements to increase awareness and engagement.</span>
+                        </div>
+                        </label>
+                                        </div>
+                                        <div class="option" aria-disabled="true">
+                                            <label class="checkbox-label">
+                        <input type="checkbox" class="custom-checkbox" disabled>
+                        <span class="checkmark"></span>
+                        <div class="label-content">
+                            <span class="main-label">Calling permissions request</span>
+                            <span class="description">Ask customers if you can call them on WhatsApp</span>
+                        </div>
+                        </label>
+                                        </div>
+                                    </template>
+
+                                    <template if:true={isAuthActive}>
+                                        <div class="option">
+                                            <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox">
+                            <span class="checkmark"></span>
+                            <div class="label-content">
+                                <span class="main-label">One-time Passcode</span>
+                                <span class="description">Send a one-time passcode for authentication purposes.</span>
+                            </div>
+                        </label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </template>
+                </div>
+                <!-- <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={hideDialog}></lightning-button>&nbsp;
+                    <lightning-button variant="brand" label="Next" onclick={nextScreen}></lightning-button>
+                </footer> -->
+            <!-- </div>
+        </section> -->
+        <!-- <div class="slds-backdrop slds-backdrop_open"></div> -->
+    </template>
+</template>

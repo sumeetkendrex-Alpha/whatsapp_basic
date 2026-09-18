@@ -1,0 +1,125 @@
+<template>
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <template if:true={isLoading}>
+    <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+</template>
+
+                <!-- Modal/Popup Header -->
+                <header class="slds-modal__header">
+                    <h2 class="slds-text-heading_medium">Bulk Messaging: {businessNumber}</h2>
+                    <button class="slds-button slds-modal__close slds-button_icon" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    </button>
+                </header>
+
+                <!-- Modal/Popup Body -->
+                <div class="slds-modal__content slds-p-around_medium">
+
+                    <template if:false={isfinalstep}>
+                        <div class="background-container">
+                            <div class="content">
+                                <div class="slds-m-around_medium">
+                                    <div class="info" style="display: flex">
+                                        <lightning-input type="file" onchange={handleFileChange}>
+                                        </lightning-input>
+                                        <div class="button" aria-describedby="help" title="Information"
+                                            >
+                                            <img src={infoLogoUrl} alt="Info Logo" class="custom-logo" />
+                                            <span class="slds-assistive-text">Info</span>
+                                        </div>
+                                    </div>
+                                    <template if:true={errorMessage}>
+                                        <div class="slds-text-color_error">{errorMessage}</div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <template if:true={isImagePopupOpen}>
+                            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                                <div class="slds-modal__container">
+                                    <header class="slds-modal__header">
+                                        <p class="popup-text">Please Upload whatsapp data in this format:</p>
+                                    </header>
+                                    <div class="slds-modal__content slds-p-around_medium">
+                                        <lightning-icon style="float:right;" icon-name='utility:download'
+                                            alternative-text='download' variant='success' size='small' title='download'
+                                            onclick={handledownload}></lightning-icon>
+                                        <img src={infoImageUrl} alt="Info Image" class="info-image" />
+                                    </div>
+                                    <footer class="slds-modal__footer">
+                                        <button class="slds-button slds-button_neutral"  onclick={handleCloseModal}>Close</button>
+                                    </footer>
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </template>
+
+
+                        <template if:true={recordlist.length}>
+                            <lightning-datatable key-field="id" data={recordlist} columns={columns}
+                                onrowselection={handleRowSelection}>
+                            </lightning-datatable>
+                        </template>
+
+                    </template>
+
+                    <template if:true={isSendTemplte}>
+                        <div
+                            style="display: flex; justify-content:center; align-items:center; flex-direction:column; width:100%; max-width:none">
+                            <!-- <div class="add-heading">
+                                Templates
+                            </div> -->
+                            <div class="add-body">
+                                <!-- Category (Picklist) -->
+                                <lightning-combobox name="categoryPicker" label="Select Category"
+                                    value={selectedCategory} options={isTemplateCategory}
+                                    onchange={handleCategoryChange}>
+                                </lightning-combobox>
+
+                                <!-- Show only if category is selected -->
+                                <template if:true={selectedCategory}>
+                                    <lightning-combobox label="Template Type" style="width: 100%;" name="templateType"
+                                        class="templateType" options={isTemplateOptions} value={isTemplateType}
+                                        onchange={handleTemplateTypeChange}>
+                                    </lightning-combobox>
+                                </template>
+
+                                <!-- Show only if template type is selected -->
+                                <template if:true={isTemplateType}>
+                                    <lightning-combobox label="Template" name="template" class="template"
+                                        options={istemplateName} value={isTemplate} onchange={handleTemplateChange}
+                                        style="width: 100%;">
+                                    </lightning-combobox>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+
+
+                </div>
+
+                <!-- Modal/Popup Footer -->
+               <footer class="slds-modal__footer">
+    <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-center slds-wrap slds-gutters_small" style="width: 100%;">
+        <lightning-button variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>
+        
+        <template if:false={isSendTemplte}>
+            <button  onclick={handleNext}>Next</button>
+        </template>
+        
+        <template if:true={isSendTemplte}>
+            <button  onclick={handleSendTemplate}>Send</button>
+        </template>
+    </div>
+</footer>
+
+            </div>
+        </section>
+
+        <!-- Modal Backdrop -->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

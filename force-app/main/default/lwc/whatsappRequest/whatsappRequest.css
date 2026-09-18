@@ -1,0 +1,244 @@
+.conversation-container {
+            padding: 20px;
+            border: 1px solid #d8dde6;
+            border-radius: 8px;
+            background-color:white;
+            font-family: 'Salesforce Sans', Arial, sans-serif;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+.conversation-container h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    background: white;
+    width: 85%;
+    height: 60px;
+    top: 45px;
+}
+
+.notification-container {
+    margin-left: 5px;
+    position: relative;
+    display: inline-block; /* Ensures proper alignment */
+}
+ 
+.notification-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+ .conversation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px !important;
+        }
+
+        .conversation-table th,
+        .conversation-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: solid 2px #0065d3; /* Remove border */
+        }
+
+        .conversation-table th {
+            background-color: #f4f6f9;
+            color: #16325c;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+      
+
+        .conversation-table tr:hover {
+            background-color: #f0f5fc;
+        }
+
+        .fontc {
+            color: #0065d3;
+            font-weight: bold;
+        }
+
+    .accept-button {
+    background-color: #99EDC3; /* light green */
+    color: #155724; /* dark green */
+    border: none;
+    padding: 16px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.accept-button:hover{
+    background-color: #3DED97;
+}
+.decline-button {
+    background-color: #f8d7da; /* light red */
+    color: #721c24; /* dark red */
+    border: none;
+    padding: 16px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.decline-button:hover {
+    background-color: #FC94AF; /* light red */
+}
+.button-space {
+    width: 10px; /* Adjust the space between buttons */
+    display: inline-block;
+}
+
+.button-group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.message-count-button {
+    margin-left: 4px;
+    display: inline-block;
+    padding: 1px 2px;
+    font-size: 1rem;
+    border-radius: 50%;
+    background-color: lightgreen;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.message-count-button:hover {
+    background-color: #90ee90; /* Slightly darker green for hover effect */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+
+.message-count-button:active {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow for active state */
+    transform: scale(0.98); /* Add a slight press effect */
+}
+
+
+/* Media Query for screens smaller than 768px */
+@media screen and (max-width: 340px) {
+
+    .conversation-container {
+            padding: 20px;
+            border: 1px solid #d8dde6;
+            border-radius: 8px;
+            background-color:black;
+            font-family: 'Salesforce Sans', Arial, sans-serif;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+ .conversation-table {
+            width: 20%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .conversation-table th,
+        .conversation-table td {
+            padding: 0px;
+            text-align: left;
+            border-bottom: solid 2px #0065d3; /* Remove border */
+        }
+
+        .conversation-table th {
+            background-color: #f4f6f9;
+            color: #16325c;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+      
+
+        .conversation-table tr:hover {
+            background-color: #f0f5fc;
+        }
+
+        .fontc {
+            color: #0065d3;
+            font-weight: bold;
+        }
+
+    .accept-button {
+    background-color: #99EDC3; /* light green */
+    color: #155724; /* dark green */
+    border: none;
+    padding: 16px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.accept-button:hover{
+    background-color: #3DED97;
+}
+
+.redirect{
+    background-color: rgba(6, 165, 154, 1);
+    border: none;
+    padding: 16px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+
+}
+
+.redirect:hover{
+    background-color: rgba(6, 165, 154, .7);
+}
+.decline-button {
+    background-color: #f8d7da; /* light red */
+    color: #721c24; /* dark red */
+    border: none;
+    padding: 16px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.decline-button:hover {
+    background-color: #FC94AF; /* light red */
+}
+.button-space {
+    width: 10px; /* Adjust the space between buttons */
+    display: inline-block;
+}
+
+
+  
+}

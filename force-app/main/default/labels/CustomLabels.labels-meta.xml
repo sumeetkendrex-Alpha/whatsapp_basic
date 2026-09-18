@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Library_Name</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Library Name</shortDescription>
+        <value>Face Images</value>
+    </labels>
+    <labels>
+        <fullName>SecurityToken</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>WhatsAppSecurityToken</shortDescription>
+        <value>WHATAPPTOKEN</value>
+    </labels>
+    <labels>
+        <fullName>WHATSAPPSECRET</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>WHATSAPPSECRET</shortDescription>
+        <value>WHATSAPPTOKEN</value>
+    </labels>
+    <labels>
+        <fullName>Whatsapp_Bearer_token</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SecurityToken</shortDescription>
+        <value>EAAUk2mCdHZAcBO2TysKXvvePWRHmuHoJzR6sifMBfHEOUTIA0qqjIPx5ZCpAcOgZAcHCWINmCulQtRY1K3KapvNivHZBI7MQJoyvOlN4wDRsANR0yfUcYZCeVndKvs99ItyMM8zT079VyFYpVYRMEQWSjvg5Gg8g6QwqUPruZAHQp4hiqIG64AZATxtAA2BYYAE</value>
+    </labels>
+</CustomLabels>

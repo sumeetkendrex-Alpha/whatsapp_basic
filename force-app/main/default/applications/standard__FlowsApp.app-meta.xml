@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>FlowsApp</label>
+    <navType>Standard</navType>
+    <tabs>standard-home</tabs>
+    <tabs>standard-FlowRecord</tabs>
+    <tabs>standard-FlowOrchestration</tabs>
+    <tabs>WhatsApp_Message__c</tabs>
+    <tabs>WhatsappUser__c</tabs>
+    <tabs>standard-Monitor</tabs>
+    <tabs>WhatsAppMessagingSession__c</tabs>
+    <tabs>MessageLog__c</tabs>
+    <tabs>WhatsAppMetaTemplate__c</tabs>
+    <tabs>TemplateAnalytics__c</tabs>
+    <tabs>StanderdMessage__c</tabs>
+    <tabs>standard-ActionHub</tabs>
+    <tabs>standard-GlobalFlowResources</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>FlowsApp_UtilityBar</utilityBar>
+</CustomApplication>

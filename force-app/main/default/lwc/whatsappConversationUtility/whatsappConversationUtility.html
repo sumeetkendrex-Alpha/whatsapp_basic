@@ -1,0 +1,1244 @@
+<template>
+    <div if:true={isLoading} class="slds-is-relative" style="z-index: 9999;">
+        <lightning-spinner alternative-text="Loading..." variant="brand" class="slds-is-fixed">
+        </lightning-spinner>
+    </div>
+    <div class="slds-grid slds-wrap whatsapp">
+        <div class="slds-col slds-large-size_4-of-12 slds-medium-size_1-of-12 slds-size_1-of-12 contacts-section">
+            <div class="slds-grid slds-grid_vertical" style="border-right:1px solid black;">
+
+                <div class="slds-col header-regin">
+                    <div class="business-details">
+                        <div class="buss-name">
+                            {businessName}
+                        </div>
+
+                    </div>
+                    <template if:true={isPickList}>
+                        <div style="display:flex;align-items:center;justify-content:center;width:100%">
+                            <div style="flex:9">
+                                <lightning-combobox name="progress" value={value} style="width:100%"
+                                    placeholder="Select Business" options={options} onchange={handleChange}
+                                    variant="label-hidden">
+                                </lightning-combobox>
+                            </div>
+                            <div style="flex:1;display:flex;align-items:center;justify-content:end;height:34px">
+                                <lightning-icon icon-name='utility:search' alternative-text='search' size='small'
+                                    title='search' onclick={handleHeaderChange}></lightning-icon>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:false={isPickList}>
+                        <div style="display:flex;align-items:center;justify-content:center;width:100%">
+                            <div style="flex:9">
+                                <input type="text" id="text-input-id-47" placeholder="Search Contact..."
+                                    class="search-input" oninput={handleContactSearch} />
+                            </div>
+                            <div style="flex:1;display:flex;align-items:center;justify-content:end;height:34px">
+                                <lightning-icon icon-name='utility:user' alternative-text='user' size='small'
+                                    title='user' onclick={handleHeaderChange}>
+                                </lightning-icon>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div class="slds-col contacts-list">
+                    <!-- {refreshConversation} -->
+                    <template if:true={hasConversations}>
+                        <ul class="slds-has-dividers_bottom" onscroll={handleScroll}>
+                            <!-- Iterate through conversations and create list items -->
+
+                            <template for:each={conversations} for:item="conversation">
+                                <li key={conversation.user.Id} data-phone={conversation.user.CustomerPhone__c}
+                                    data-id={conversation.user.Id} data-name={conversation.user.CustomerName__c}
+                                    onclick={getCustomerPhoneNumber}>
+                                    <div data-id={conversation.user.CustomerPhone__c}
+                                        class="single-contact slds-chat-message__text"
+                                        style="width:100%;max-width:100%">
+                                        <div class="profile-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                                style="margin-bottom:-12px" fill="currentColor"
+                                                class="bi bi-person-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                            </svg>
+                                        </div>
+                                        <div class="contact-info">
+                                            <div class="slds-text-heading_small">{conversation.user.CustomerName__c}
+                                            </div>
+                                            <div class="slds-text-heading_x-small">{conversation.user.CustomerPhone__c}
+                                            </div>
+                                        </div>
+                                        <div class="slds-text-heading_small">{conversation.time} </div>
+                                        <div class={conversation.badgeClass}>
+                                            <template if:true={conversation.showBadge}>
+                                                {conversation.unreadCount}
+                                            </template>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+
+
+                            <template if:true={isLoadingConvo}>
+                                <div class="loading-spinner slds-item">
+                                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                                </div>
+                            </template>
+                        </ul>
+                        <div class="bottom-nav">
+                            <div class="nav-item">
+                                <div class="icon-container" onclick={showGroupPopup}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-people" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
+                                    </svg>
+                                </div>
+                                Bulk Chat
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon-container" onclick={handleRecordForm}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-person-add" viewBox="0 0 16 16">
+                                        <path
+                                            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                                        <path
+                                            d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+                                    </svg>
+                                </div>
+                                New Chat
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:false={hasConversations}>
+                        <div class="no-records">No conversations found.</div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!--Conversation Section-->
+
+        <div class="slds-col slds-large-size_8-of-12 slds-medium-size_1-of-12 slds-size_1-of-12 chat-section">
+            <div>
+                <section role="log" style="height: 79vh;">
+                    <template if:true={customerName}>
+                        <div class="slds-grid slds-wrap">
+                            <div class={chatAreaClass}>
+                                <div class="slds-chat-bookend">
+                                    <div class="profile" style="display:flex;align-items:center;gap:10px">
+                                        <template if:true={isMobileBack}>
+                                            <lightning-icon icon-name='utility:back' alternative-text='back'
+                                                size='x-small' title='back'
+                                                class="slds-m-right_x-small slds-m-left_small" style="cursor: pointer;"
+                                                onclick={handleBackButton}></lightning-icon>
+                                        </template>
+                                        <div style="display: flex; align-items: center; cursor: pointer;"
+                                            onclick={toggleSidePanel}>
+                                            <div class="profile-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                                    style="margin-bottom:-12px" fill="currentColor"
+                                                    class="bi bi-person-fill" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                                </svg>
+                                            </div>
+                                            <span style="margin-left:10px">{customerName}</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="customer-details">
+                                        <!-- <p><b>{customerName}</b></p> -->
+                                        <p><b></b></p>
+                                        <div class="Convesation-Details">
+                                            <lightning-icon icon-name='utility:threedots_vertical'
+                                                alternative-text='threedots_vertical' size='small'
+                                                title='threedots_vertical' class="dotIcon"
+                                                onclick={toggleConversationPopup}></lightning-icon>
+                                            <template if:true={showConversationPopup}>
+                                                <div class="ConvesationPopup">
+                                                    <div class="convo-item">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                            fill="currentColor" class="bi bi-clock-history"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z" />
+                                                            <path
+                                                                d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z" />
+                                                            <path
+                                                                d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5" />
+                                                        </svg> Expire In : {ConversationExpiration}
+                                                    </div>
+                                                    <div class="convo-item">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                            fill="currentColor" class="bi bi-globe-americas"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0M2.04 4.326c.325 1.329 2.532 2.54 3.717 3.19.48.263.793.434.743.484q-.121.12-.242.234c-.416.396-.787.749-.758 1.266.035.634.618.824 1.214 1.017.577.188 1.168.38 1.286.983.082.417-.075.988-.22 1.52-.215.782-.406 1.48.22 1.48 1.5-.5 3.798-3.186 4-5 .138-1.243-2-2-3.5-2.5-.478-.16-.755.081-.99.284-.172.15-.322.279-.51.216-.445-.148-2.5-2-1.5-2.5.78-.39.952-.171 1.227.182.078.099.163.208.273.318.609.304.662-.132.723-.633.039-.322.081-.671.277-.867.434-.434 1.265-.791 2.028-1.12.712-.306 1.365-.587 1.579-.88A7 7 0 1 1 2.04 4.327Z" />
+                                                        </svg> Origin : {ConversationOrigin}
+                                                    </div>
+                                                    <div class="convo-item">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                            fill="currentColor" class="bi bi-wallet2"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z" />
+                                                        </svg> Pricing Model : {PricingModel}
+                                                    </div>
+                                                    <div class="convo-item">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                            fill="currentColor" class="bi bi-diagram-3"
+                                                            viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd"
+                                                                d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+                                                        </svg> Category : {PricingCategory}
+                                                    </div>
+                                                    <div class="convo-item">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                            fill="currentColor" class="bi bi-receipt"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z" />
+                                                            <path
+                                                                d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
+                                                        </svg> Billable : {PricingBillable}
+                                                    </div>
+                                                    <div class="convo-item">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                            fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                                            <path
+                                                                d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                                        </svg> Time : {timeCount}
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="slds-chat-list chat-messages" style="height: 360px; overflow-y: auto;">
+                                    <template for:each={messages} for:item="message">
+                                        <div class="chat-message-wrapper" key={message.Id} data-id={message.Id}
+                                            data-message-id={message.MessageID__c}
+                                            data-parent={message.ParentMessageID__c} onclick={handleClickOnContent}>
+                                            <!-- Inbound Messages -->
+                                            <template if:true={message.isInbound}>
+                                                <div class="slds-chat-listitem slds-chat-listitem_inbound">
+                                                    <div class="slds-chat-message">
+                                                        <div class="slds-chat-message__body">
+                                                            <template if:true={message.isText}>
+                                                                <div style="display:flex; width: max-content; cursor: pointer;"
+                                                                    data-message-id={message.MessageID__c}
+                                                                    data-parent={message.ParentMessageID__c}>
+
+                                                                    <div
+                                                                        class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                        {message.MessageContent__c}
+                                                                    </div>
+                                                                    <span  style="padding-left: 8px;">
+                                                                        <template if:true={message.isParent}>
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                width="24" height="24"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path fill="#000"
+                                                                                    d="M10 9V5l-7 7l7 7v-4.1c5 0 8.5 1.6 11 5.1c-1-5-4-10-11-11"
+                                                                                    stroke-width="0.5" stroke="#000" />
+                                                                            </svg>
+                                                                        </template>
+                                                                    </span>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isButton}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                    {message.TemplateButtonText__c}
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isInteractive}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                    {message.MessageType__c} Interactive..!!!
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isTemplate}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                    The Template with this Name has Been Shared:
+                                                                    {message.TemplateName__c}
+                                                                </div>
+                                                            </template>
+
+                                                            <template if:true={message.isReaction}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                    {message.Reaction__c}
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isImage}>
+                                                                <div style="display:flex; width: max-content; cursor: pointer;"
+                                                                    data-message-id={message.MessageID__c}
+                                                                    data-parent={message.ParentMessageID__c}>
+                                                                    <div
+                                                                        class="slds-chat-message__text slds-chat-message__text_inbound  ">
+                                                                        <div class="slds-chat-message__image"
+                                                                            style="max-width: 25vw;">
+                                                                            <img src={message.MediaLink__c}
+                                                                            alt="Media content"
+                                                                            class="slds-chat-message__media" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <span  style="padding: 10px; margin:auto; width:50%;">
+                                                                        <template if:true={message.isParent}>
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                width="24" height="24"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path fill="#000"
+                                                                                    d="M10 9V5l-7 7l7 7v-4.1c5 0 8.5 1.6 11 5.1c-1-5-4-10-11-11"
+                                                                                    stroke-width="0.5" stroke="#000" />
+                                                                            </svg>
+                                                                        </template>
+                                                                    </span>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isVideo}>
+                                                                <div style="display:flex; width: max-content; cursor: pointer;"
+                                                                    data-message-id={message.MessageID__c}
+                                                                    data-parent={message.ParentMessageID__c}>
+                                                                    <div
+                                                                        class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                        <div class="slds-chat-message__video">
+                                                                            <video src={message.MediaLink__c}
+                                                                                alt="Media content" width="320"
+                                                                                height="240" controls type="video/mp4"
+                                                                                class="slds-chat-message__media"></video>
+                                                                        </div>
+                                                                    </div>
+                                                                    <span  style="padding: 10px; margin:auto; width:50%;">
+                                                                        <template if:true={message.isParent}>
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                width="24" height="24"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path fill="#000"
+                                                                                    d="M10 9V5l-7 7l7 7v-4.1c5 0 8.5 1.6 11 5.1c-1-5-4-10-11-11"
+                                                                                    stroke-width="0.5" stroke="#000" />
+                                                                            </svg>
+                                                                        </template>
+                                                                    </span>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isAudio}>
+                                                                <div style="display:flex; width: max-content; cursor: pointer;"
+                                                                    data-message-id={message.MessageID__c}
+                                                                    data-parent={message.ParentMessageID__c}>
+                                                                    <div
+                                                                        class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                        <div class="slds-chat-message__audio">
+                                                                            <audio src={message.MediaLink__c}
+                                                                                alt="Media content" width="320"
+                                                                                height="240" controls type="audio/m3"
+                                                                                class="slds-chat-message__media"></audio>
+                                                                        </div>
+                                                                    </div>
+                                                                    <span  style="padding-left: 8px;">
+                                                                        <template if:true={message.isParent}>
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                width="24" height="24"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path fill="#000"
+                                                                                    d="M10 9V5l-7 7l7 7v-4.1c5 0 8.5 1.6 11 5.1c-1-5-4-10-11-11"
+                                                                                    stroke-width="0.5" stroke="#000" />
+                                                                            </svg>
+                                                                        </template>
+                                                                    </span>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isDocument}>
+                                                                <div style="display:flex; width: max-content; cursor: pointer;"
+                                                                    data-message-id={message.MessageID__c}
+                                                                    data-parent={message.ParentMessageID__c}>
+                                                                    <div
+                                                                        class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                        <div>
+                                                                            <a href={message.MediaLink__c}>
+                                                                                Document
+                                                                            </a>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <span style="padding: 10px; margin:auto; width:50%;">
+                                                                        <template if:true={message.isParent}>
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                width="24" height="24"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path fill="#000"
+                                                                                    d="M10 9V5l-7 7l7 7v-4.1c5 0 8.5 1.6 11 5.1c-1-5-4-10-11-11"
+                                                                                    stroke-width="0.5" stroke="#000" />
+                                                                            </svg>
+                                                                        </template>
+                                                                    </span>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isOrder}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_inbound">
+                                                                    The Order has been placed from custome:
+                                                                    {message.MessageType__c}
+                                                                </div>
+                                                            </template>
+
+                                                            <div
+                                                                class="slds-chat-message__meta slds-chat-message__meta_inbound">
+                                                                {message.CustomerName__c} • {message.formattedDateTime}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+
+                                            <!-- Outbound Messages -->
+                                            <template if:true={message.isOutbound}>
+                                                <div class="slds-chat-listitem slds-chat-listitem_outbound">
+                                                    <div class="slds-chat-message">
+                                                        <div class="slds-chat-message__body">
+                                                            <template if:true={message.isText}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                                    {message.MessageContent__c}
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isImage}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                                    <div class="slds-chat-message__video"
+                                                                        style="max-width: 25vw;">
+                                                                        <img src={message.MediaLink__c}
+                                                                            alt="Media content"
+                                                                            class="slds-chat-message__media" />
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isVideo}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                                    <div class="slds-chat-message__video">
+                                                                        <video src={message.MediaLink__c}
+                                                                            alt="Media content" width="320" height="240"
+                                                                            controls type="video/mp4"
+                                                                            class="slds-chat-message__media"></video>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isAudio}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                                    <div class="slds-chat-message__audio">
+                                                                        <audio src={message.MediaLink__c}
+                                                                            alt="Media content" width="320" height="240"
+                                                                            controls type="audio/m3"
+                                                                            class="slds-chat-message__media"></audio>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isDocument}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                                    <div>
+                                                                        <a href={message.MediaLink__c}>
+                                                                            Document
+                                                                        </a>
+
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isButton}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                                    {message.TemplateButtonText__c}
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isTemplate}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_outbound">
+
+                                                                    <div class="card">
+                                                                        <template if:true={message.isTemplateTypeText}>
+                                                                            {message.TemplateHeaderURL__c}
+                                                                        </template>
+                                                                        <template if:true={message.isTemplateTypeImage}>
+                                                                            <img src={message.MediaLink__c}
+                                                                                alt="Media content"
+                                                                                class="slds-chat-message__media" />
+                                                                        </template>
+                                                                        <template if:true={message.isTemplateTypeVideo}>
+                                                                            <video src={message.MediaLink__c}
+                                                                                alt="Media content" width="320"
+                                                                                height="240" controls type="video/mp4"
+                                                                                class="slds-chat-message__media"></video>
+                                                                        </template>
+                                                                        <template if:true={message.isTemplateTypeAudio}>
+                                                                            <audio src={message.MediaLink__c}
+                                                                                alt="Media content" width="320"
+                                                                                height="240" controls type="audio/m3"
+                                                                                class="slds-chat-message__media"></audio>
+                                                                        </template>
+                                                                        <template
+                                                                            if:true={message.isTemplateTypeDocument}>
+                                                                            <a href={message.TemplateHeaderURL__c}> </a>
+
+                                                                        </template>
+
+                                                                        <p style=" margin-top: 16px;">
+                                                                            {message.MessageContent__c}</p>
+                                                                        <div class="button-group">
+                                                                            <template for:each={message.templateButtons}
+                                                                                for:item="btn">
+                                                                                <button key={btn}
+                                                                                    class="button yes">{btn}</button>
+                                                                            </template>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </template>
+                                                            <template if:true={message.isReaction}>
+                                                                <div
+                                                                    class="slds-chat-message__text slds-chat-message__text_outbound">
+                                                                    {message.Reaction__c}
+                                                                </div>
+                                                            </template>
+                                                            <div
+                                                                class="slds-chat-message__meta slds-chat-message__meta_outbound">
+                                                                {message.Owner.Name} • {message.formattedDateTime}
+                                                                <template if:true={message.isMessageSent}>
+                                                                    <img src={sentTick} alt=""
+                                                                        style="width: 17px; margin-left: 5px;">
+                                                                </template>
+                                                                <template if:true={message.isMessageDelivered}>
+                                                                    <img src={deliveredTick} alt=""
+                                                                        style="width: 17px; margin-left: 5px;">
+                                                                </template>
+                                                                <template if:true={message.isMessageRead}>
+                                                                    <img src={readTick} alt=""
+                                                                        style="width: 17px; margin-left: 5px;">
+                                                                </template>
+                                                                <template if:true={message.isMessageFailed}>
+                                                                    <img src={failedTick} alt=""
+                                                                        style="width: 17px; margin-left: 5px;">
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:true={message.isEndChat}>
+                                                <div class="slds-chat-bookend slds-chat-bookend_stop endChatBookend">
+                                                    <span
+                                                        class="slds-icon_container slds-icon-utility-end_chat slds-chat-icon">
+                                                        <svg class="slds-icon slds-icon_x-small slds-icon-text-default"
+                                                            aria-hidden="true">
+                                                            <use
+                                                                xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#end_chat">
+                                                            </use>
+                                                        </svg>
+                                                    </span>
+                                                    <p>Chat ended by
+                                                        <b> {message.Owner.Name}</b> • {message.formattedDateTime}
+                                                    </p>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <!-- footer -->
+
+
+                                <template if:true={chatStatusToDisable}>
+                                    <div class="footer-container">
+                                        <div class="slds-grid slds-wrap slds-p-around_small footer">
+
+                                            <div class="slds-col slds-m-top_xxx-small popsCls"
+                                                style="max-height: 30px;display: flex; align-items: center; justify-content: center;position:relative">
+
+                                                <template if:true={showAttechmentPopup}>
+                                                    <div class="popup-container popsCls">
+                                                        <div class="attachment-container">
+
+                                                            <template if:false={isSessionEnded}>
+                                                                <div class="field slds-chat-message__text slds-chat-message__text_inbound att-item"
+                                                                    onclick={handleimageUpload}>
+                                                                    <input class="handle_image" type="file"
+                                                                        accept="image/*" onchange={handleimageUpload}
+                                                                        style="opacity:0; max-width:150px;"></input>
+                                                                    <label style="margin-left:-150px;cursor:pointer;"
+                                                                        for="message">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            width="20" height="20"
+                                                                            onclick={handleimageUpload}
+                                                                            fill="currentColor" class="bi bi-card-image"
+                                                                            viewBox="0 0 16 16">
+                                                                            <path
+                                                                                d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                                                                            <path
+                                                                                d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z" />
+                                                                        </svg>
+                                                                        &nbsp;&nbsp;
+                                                                        Image</label>
+                                                                </div>
+                                                                <div class="field slds-chat-message__text video-div slds-chat-message__text_inbound  att-item"
+                                                                    onclick={handleVideoUpload}>
+                                                                    <input class="handle_image" type="file"
+                                                                        accept="video/*" onchange={handleVideoUpload}
+                                                                        style="opacity:0; max-width:150px;"></input>
+                                                                    <label style="margin-left:-150px; cursor:pointer;"
+                                                                        for="email">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            width="20" height="20" fill="currentColor"
+                                                                            class="bi bi-camera-video"
+                                                                            viewBox="0 0 16 16">
+                                                                            <path fill-rule="evenodd"
+                                                                                d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z" />
+                                                                        </svg>&nbsp;&nbsp;
+                                                                        Video</label>
+
+                                                                </div>
+                                                                <div class="field slds-chat-message__text slds-chat-message__text_inbound  att-item"
+                                                                    onclick={handleAudioUpload}>
+                                                                    <input class="handle_image" type="file"
+                                                                        accept="audio/*" onchange={handleAudioUpload}
+                                                                        style="opacity:0; max-width:150px;"></input>
+                                                                    <label style="margin-left:-150px; cursor:pointer;"
+                                                                        for="name">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            width="20" height="20" fill="currentColor"
+                                                                            class="bi bi-music-note-beamed"
+                                                                            viewBox="0 0 16 16">
+                                                                            <path
+                                                                                d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
+                                                                            <path fill-rule="evenodd"
+                                                                                d="M14 11V2h1v9zM6 3v10H5V3z" />
+                                                                            <path
+                                                                                d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
+                                                                        </svg>&nbsp;&nbsp; Audio</label>
+                                                                </div>
+                                                                <div class="field slds-chat-message__text slds-chat-message__text_inbound  att-item"
+                                                                    onclick={handlePdfUpload}>
+                                                                    <input class="handle_image" type="file"
+                                                                        accept=".pdf,.html,.css,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.json,.xml,.csv/*"
+                                                                        onchange={handlePdfUpload}
+                                                                        style="opacity:0; max-width:150px"></input>
+                                                                    <label style="margin-left:-150px; cursor:pointer;"
+                                                                        for="phone">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            width="20" height="20" fill="currentColor"
+                                                                            class="bi bi-file-earmark"
+                                                                            viewBox="0 0 16 16">
+                                                                            <path
+                                                                                d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
+                                                                        </svg>&nbsp;&nbsp;Document</label>
+                                                                </div>
+
+
+
+                                                            </template>
+
+                                                            <div class="field slds-chat-message__text slds-chat-message__text_inbound  att-item"
+                                                                onclick={handleTemplateUpload}>
+                                                                <label for="phone" style="cursor:pointer;"><svg
+                                                                        xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                        height="20" fill="currentColor"
+                                                                        class="bi bi-file-plus" viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z" />
+                                                                        <path
+                                                                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
+                                                                    </svg>&nbsp;&nbsp;
+
+                                                                    Template</label>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                                <lightning-icon icon-name='utility:add' alternative-text='add'
+                                                    size='x-small' title='add' onclick={togglePopup} class="addIcon">
+                                                </lightning-icon>
+                                            </div>
+                                        </div>
+                                        <!-- <div
+                                            class="field slds-chat-message__text slds-chat-message__text_inbound  att-item">
+                                            <c-standerd-messages customer-name={customerName} value={value}
+                                                phone-number={phoneNumber}></c-standerd-messages>
+                                        </div> -->
+                                        <div class="slds-col send-input-container" style="width:100%;">
+                                            <input type="text" class="slds-input send-input" name="name"
+                                                placeholder="Type message here..." style="color:black"
+                                                onkeypress={callSendMethod} oninput={handleIconSwitch}
+                                                >
+                                        </div>
+                                        <!-- <template if:false={isSessionEnded}> -->
+                                            <div class="slds-col"
+                                                style="width:50px; display: flex; justify-content: center">
+                                                <!-- <template if:true={switchIcon}>
+
+                                        <div class="circle" onclick={toggleActive}>
+                                            <img src={micIcon} alt="Microphone" style="width:20px; cursor:pointer" />
+                                        </div>
+
+                                    </template>
+                                    <template if:false={switchIcon}> -->
+                                                <lightning-icon icon-name='utility:send' alternative-text='send'
+                                                    size='small' title='send' style="cursor:pointer"
+                                                    onclick={sendMessageHandler}>
+                                                </lightning-icon>
+                                            </div>
+
+                                            <div class="endChat">
+                                                <button onclick={handleEndChat}> End Chat
+                                                </button>
+                                            </div>
+                                        <!-- </template> -->
+
+                                    </div>
+                                </template>
+
+                                <!--     <template if:false={chatStatusToDisable}>
+                            <div class="footer-container">
+                                <div class="slds-grid slds-wrap slds-p-around_small footer">
+
+                                    <div class="slds-col slds-m-top_xxx-small popsCls"
+                                        style="max-height: 30px;display: flex; align-items: center; justify-content: center;position:relative">
+
+                                        <template if:true={showAttechmentPopup}>
+                                            <div class="popup-container">
+                                                <div class="attachment-container">
+                                                    <div class="field slds-chat-message__text slds-chat-message__text_inbound att-item"
+                                                        style="pointer-events: none; opacity: 0.5;"
+                                                        onclick={handleimageUpload}>
+                                                        <input class="handle_image" type="file" accept="image/*"
+                                                            onchange={handleimageUpload}
+                                                            style="opacity:0; max-width:150px;"></input>
+                                                        <label style="margin-left:-150px;cursor:pointer;" for="message">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                height="20" fill="currentColor" class="bi bi-card-image"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                                                                <path
+                                                                    d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z" />
+                                                            </svg>
+                                                            &nbsp;&nbsp;
+                                                            Image</label>
+                                                    </div>
+
+                                                    <div class="field slds-chat-message__text video-div slds-chat-message__text_inbound att-item"
+                                                        style="pointer-events: none; opacity: 0.5;"
+                                                        onclick={handleVideoUpload}>
+                                                        <input class="handle_image" type="file" accept="video/*"
+                                                            onchange={handleVideoUpload}
+                                                            style="opacity:0; max-width:150px;"></input>
+                                                        <label style="margin-left:-150px; cursor:pointer;" for="email">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                height="20" fill="currentColor"
+                                                                class="bi bi-camera-video" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z" />
+                                                            </svg>&nbsp;&nbsp;
+                                                            Video</label>
+
+                                                    </div>
+
+                                                    <div class="field  slds-chat-message__text video-div slds-chat-message__text_inbound att-item"
+                                                        style="pointer-events: none; opacity: 0.5;"
+                                                        onclick={handleAudioUpload}>
+                                                        <input class="handle_image" type="file" accept="audio/*"
+                                                            onchange={handleAudioUpload}
+                                                            style="opacity:0; max-width:150px;"></input>
+                                                        <label style="margin-left:-150px; cursor:pointer;" for="name">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                height="20" fill="currentColor"
+                                                                class="bi bi-music-note-beamed" viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M6 13c0 1.105-1.12 2-2.5 2S1 14.105 1 13s1.12-2 2.5-2 2.5.896 2.5 2m9-2c0 1.105-1.12 2-2.5 2s-2.5-.895-2.5-2 1.12-2 2.5-2 2.5.895 2.5 2" />
+                                                                <path fill-rule="evenodd"
+                                                                    d="M14 11V2h1v9zM6 3v10H5V3z" />
+                                                                <path
+                                                                    d="M5 2.905a1 1 0 0 1 .9-.995l8-.8a1 1 0 0 1 1.1.995V3L5 4z" />
+                                                            </svg>&nbsp;&nbsp;
+                                                            Audio</label>
+                                                    </div>
+
+                                                    <div class="field slds-chat-message__text slds-chat-message__text_inbound att-item"
+                                                        style="pointer-events: none; opacity: 0.5;"
+                                                        onclick={handlePdfUpload}>
+                                                        <input class="handle_image" type="file"
+                                                            accept=".pdf,.html,.css,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.json,.xml,.csv/*"
+                                                            onchange={handlePdfUpload}
+                                                            style="opacity:0; max-width:150px"></input>
+                                                        <label style="margin-left:-150px; cursor:pointer;" for="phone">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                height="20" fill="currentColor"
+                                                                class="bi bi-file-earmark" viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
+                                                            </svg>&nbsp;&nbsp;
+                                                            Document</label>
+
+                                                    </div>
+                                                    <div class="field slds-chat-message__text slds-chat-message__text_inbound  att-item"
+                                                        onclick={handleTemplateUpload}
+                                                        style="pointer-events: none; opacity: 0.5;">
+                                                        <label>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                height="20" fill="currentColor" class="bi bi-file-plus"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5z" />
+                                                                <path
+                                                                    d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
+                                                            </svg>&nbsp;&nbsp;
+                                                            Template</label>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <lightning-icon icon-name='utility:add' alternative-text='add' size='x-small'
+                                            title='add' onclick={togglePopup} class="addIcon"></lightning-icon>
+                                    </div>
+                                </div>
+                                <div class="slds-col send-input-container" style="width:100%;">
+                                    <input type="text" class="slds-input send-input" name="name"
+                                        placeholder="Type message here..." style="color:black;width:100%"
+                                        onkeypress={callSendMethod} oninput={handleIconSwitch}>
+                                </div>
+                                <div class="slds-col"
+                                    style="width:50px; display: flex; justify-content: center; pointer-events: none; opacity: 0.5;">
+                                    <template if:true={switchIcon}>
+
+                                        <div class="circle" onclick={toggleActive}
+                                            style="pointer-events: none; opacity: 0.5;">
+                                            <img src={micIcon} alt="Microphone" style="width:20px; cursor:pointer" />
+                                        </div>
+
+                                    </template>
+                                    <template if:false={switchIcon}> 
+                                    <lightning-icon icon-name='utility:send' alternative-text='send' size='small'
+                                        title='send' style="cursor:pointer" onclick={sendMessageHandler}>
+                                    </lightning-icon>
+                                </div>
+                                <div class="endChat" style="pointer-events: none; opacity: 0.5;">
+                                    <button onclick={handleEndChat}> End Chat
+                                    </button>
+                                </div>
+                            </div>
+                        </template> -->
+                            </div>
+                            <!-- Side Panel: Takes space when open -->
+                            <template if:true={isSidePanelOpen}>
+                                <div class={sidePanelClass} style="height: 79vh; margin-top:-15px; overflow-x: hidden;">
+                                    <!-- Header -->
+                                    <div
+                                        style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+
+                                        <!-- Close Icon (left) -->
+                                        <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"
+                                            title="Close" style="cursor: pointer;" onclick={toggleSidePanel}>
+                                        </lightning-icon>
+
+                                        <!-- User Icon (right) -->
+                                        <lightning-icon icon-name="standard:user" size="medium"
+                                            alternative-text="User Icon"
+                                            class="slds-icon slds-icon-text-default custom-user-icon">
+                                        </lightning-icon>
+
+                                    </div>
+
+
+
+                                    <div style="padding: 5px; border-bottom: 1px solid #ddd; position: relative;"
+                                        class="slds-grid slds-gutters">
+
+                                        <div class="slds-col">
+                                            <h2 style="margin: 0; font-size: 18px;">{customerName}
+                                                <span class="slds-text-body_small">...</span>
+                                            </h2>
+                                            <p class="slds-text-body_regular">{phoneNumber}</p>
+                                        </div>
+                                        <div class="slds-col slds-align-right" style="margin-left:200px;">
+                                            <lightning-icon icon-name="utility:edit" size="xx-small"
+                                                class="slds-m-right_xx-small slds-icon-text-default slds-text-link"
+                                                alternative-text="Edit" onclick={handleEdit}>
+                                            </lightning-icon><b>Edit</b>
+
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Tabs -->
+                                    <div class="slds-tabs_default">
+                                        <ul class="slds-tabs_default__nav custom-tab-nav" role="tablist">
+                                            <li class="slds-tabs_default__item custom-tab-item" title="Notes"
+                                                role="presentation">
+                                                <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab"
+                                                    onclick={openPopup}>
+                                                    <lightning-icon icon-name="utility:note" size="small"
+                                                        class="slds-m-right_xx-small"></lightning-icon>
+                                                    Notes
+                                                </a>
+
+                                                <!-- Modal -->
+                                                <template if:true={showModal}>
+                                                    <section role="dialog" tabindex="-1"
+                                                        class="slds-modal slds-fade-in-open">
+                                                        <div class="slds-modal__container" style="width:30%;">
+                                                            <!-- Modal Header -->
+                                                            <header class="slds-modal__header">
+                                                                <h2 class="slds-text-heading_medium">Create Notes</h2>
+                                                            </header>
+
+                                                            <!-- Modal Body -->
+                                                            <div class="slds-modal__content slds-p-around_medium">
+                                                                <div class="slds-form-element slds-m-bottom_medium">
+                                                                    <label class="slds-form-element__label"
+                                                                        for="subjectInput"
+                                                                        style="display:flex;align-items: left;">Subject</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning-input name="subjectInput"
+                                                                            variant="label-hidden"
+                                                                            onchange={handleSubjectChange}>
+                                                                        </lightning-input>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="slds-form-element slds-m-bottom_medium">
+                                                                    <label class="slds-form-element__label"
+                                                                        for="statusInput"
+                                                                        style="display:flex;align-items: left;">Status</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning-combobox name="statusInput"
+                                                                            variant="label-hidden"
+                                                                            options={statusOptions}
+                                                                            onchange={handleStatusChange}>
+                                                                        </lightning-combobox>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="slds-form-element slds-m-bottom_medium">
+                                                                    <label class="slds-form-element__label"
+                                                                        for="dueDateInput"
+                                                                        style="display:flex;align-items: left;">Due
+                                                                        Date</label>
+                                                                    <div class="slds-form-element__control">
+                                                                        <lightning-input type="date" name="dueDateInput"
+                                                                            variant="label-hidden"
+                                                                            onchange={handleDueDateChange}>
+                                                                        </lightning-input>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <!-- Modal Footer -->
+                                                            <footer class="slds-modal__footer">
+                                                                <!-- <lightning-button style="border-radius: 5px !important;" label="Cancel" variant="neutral"
+                                                                    class="slds-m-right_small" onclick={closePopup}>
+                                                                </lightning-button> -->
+                                                                <lightning-button label="Cancel" variant="neutral"
+                                                                    title="Non-primary action" onclick={closePopup}
+                                                                    class="slds-m-right_small slds-m-left_x-small">
+                                                                </lightning-button>
+
+                                                                <lightning-button style="border-radius: 5px !important;"
+                                                                    label="Submit" variant="brand" onclick={createTask}>
+                                                                </lightning-button>
+                                                            </footer>
+
+                                                        </div>
+                                                    </section>
+                                                    <div class="slds-backdrop slds-backdrop_open"></div>
+                                                </template>
+
+
+                                            </li>
+                                            <li class="slds-tabs_default__item custom-tab-item" title="Orders"
+                                                role="presentation">
+                                                <a class="slds-tabs_default__link" href="javascript:void(0);"
+                                                    role="tab">
+                                                    <lightning-icon icon-name="utility:cart" size="small"
+                                                        class="slds-m-right_xx-small"></lightning-icon>
+                                                    Orders
+                                                </a>
+                                            </li>
+                                            <li class="slds-tabs_default__item custom-tab-item" title="Call"
+                                                role="presentation">
+                                                <a class="slds-tabs_default__link" href="javascript:void(0);"
+                                                    role="tab">
+                                                    <lightning-icon icon-name="utility:call" size="small"
+                                                        class="slds-m-right_xx-small"></lightning-icon>
+                                                    Call
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+
+                                    <!-- Tags Section -->
+                                    <div class="slds-m-top_small">
+                                        <!-- <span class="slds-badge slds-theme_error">
+                                            {customerTag} <lightning-icon icon-name="utility:close" size="xx-small"
+                                                onclick={removeTag}></lightning-icon>
+                                        </span> -->
+                                        <a href="javascript:void(0);" class="slds-m-left_small" onclick={openModal}
+                                            style="font-size:25px !important;">
+                                            Add Tags
+                                        </a>
+
+                                        <div class="slds-modal__content slds-p-around_medium">
+                                            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                                                <template for:each={tags} for:item="tag">
+                                                    <div class="slds-col slds-size_4-of-12 slds-m-top_small" key={tag}>
+                                                        <span class="slds-pill"
+                                                            style="min-width: 100px; display: inline-block; border-radius: 1rem; padding: 0.5rem 1rem;">
+                                                            <span class="slds-pill__label">{tag}</span>
+                                                        </span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Tags Pop Modal code-->
+                                        <template if:true={isOpen}>
+                                            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                                                <div class="slds-modal__container">
+                                                    <header class="slds-modal__header">
+                                                        <button class="slds-button slds-modal__close"
+                                                            onclick={closeModal}>
+                                                            <lightning-icon icon-name="utility:close"
+                                                                alternative-text="Close" size="small"></lightning-icon>
+                                                        </button>
+                                                        <h2 class="slds-text-heading_medium">Tags</h2>
+                                                    </header>
+
+                                                    <div class="slds-modal__content slds-p-around_medium">
+                                                        <div
+                                                            class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium ">
+                                                            <template for:each={draftTags} for:item="tag">
+                                                                <div class="slds-col slds-size_2-of-12 slds-m-top_small"
+                                                                    key={index}>
+                                                                    <lightning-pill label={tag}
+                                                                        onremove={handleRemoveTag}>
+                                                                        <lightning-icon icon-name="utility:tag"
+                                                                            alternative-text="Tag"></lightning-icon>
+                                                                    </lightning-pill>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+
+                                                        <lightning-input label="Add a tag" value={newTag}
+                                                            onchange={handleInputChange} onkeypress={handleKeyPress}
+                                                            placeholder="Add a tag and press Enter"></lightning-input>
+                                                    </div>
+
+                                                    <footer class="slds-modal__footer">
+                                                        <lightning-button label="Save" onclick={handleTagsSave}
+                                                            class="slds-m-right_small slds-m-left_x-small">
+                                                        </lightning-button>
+                                                        <lightning-button variant="neutral" label="Close"
+                                                            onclick={closeModal}></lightning-button>
+                                                    </footer>
+                                                </div>
+                                            </section>
+                                            <div class="slds-backdrop slds-backdrop_open"></div>
+                                        </template>
+
+                                    </div>
+
+                                    <!-- Information Section -->
+                                    <div class="slds-m-top_medium">
+                                        <lightning-accordion allow-multiple-sections-open>
+                                            <lightning-accordion-section name="information" label="INFORMATION">
+                                                <p><strong>Name</strong><br>{customerName}</p>
+                                                <p class="slds-m-top_small"><strong>WhatsApp
+                                                        Name</strong><br>{customerName}
+                                                </p>
+                                                <p class="slds-m-top_small"><strong>Opt-In</strong><br>{customerOptIn}
+                                                </p>
+                                            </lightning-accordion-section>
+                                        </lightning-accordion>
+                                    </div>
+
+                                    <!-- Notes Section -->
+                                    <div class="slds-m-top_medium" style="padding-left: 15px;">
+                                        <h3 class="slds-text-heading_small">Notes <a href="javascript:void(0);"
+                                                class="slds-m-left_small" style="margin-left:230px;">Show All</a></h3>
+                                        <p>{customerNote}</p>
+                                    </div>
+
+                                    <!-- Follow-Up Section -->
+                                    <template if:true={tasks}>
+                                        <template for:each={formattedTasks} for:item="task">
+                                            <div class="slds-col" key={task.Id}>
+                                                <div class="slds-m-top_medium slds-box slds-theme_shade"
+                                                    style="padding: 20px;">
+                                                    <div class="slds-grid slds-wrap">
+                                                        <div class="slds-col slds-size_12-of-12">
+                                                            <strong>{task.Subject}</strong>
+                                                        </div>
+                                                        <div class="slds-col slds-size_12-of-12">
+                                                            <strong>{task.formattedDateTime}</strong>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <!-- <div class="slds-col slds-align-middle">
+                                                    <lightning-button-icon icon-name="utility:check" variant="border-filled"
+                                                        alternative-text="Mark as Complete" onclick={markComplete}>
+                                                    </lightning-button-icon>
+                                                </div> -->
+                                        </template>
+                                    </template>
+                                </div>
+                            </template>
+                            <!-- Close Side Panel  -->
+                        </div>
+                    </template>
+
+                    <template if:false={customerName}>
+                        <div class="slds-welcome">
+                            <h1>
+                                Welcome to CRM Landing Whatsapp
+                            </h1>
+                        </div>
+                    </template>
+
+
+                </section>
+            </div>
+        </div>
+    </div>
+    <template if:true={showRecordForm}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content contact-modal" id="modal-content-id-1"
+                    style="min-width: 100%; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; gap: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class=""
+                        style="display: flex; justify-content:center; align-items:center; flex-direction:column; width:100%; max-width:none">
+                        <div class="add-heading">
+                            Add New Contact
+                        </div>
+                        <div class="add-body">
+                            <lightning-combobox class="newBussinessContact" name="progress" value={value}
+                                placeholder="Select Business" options={options} onchange={handleComboboxChange}
+                                style="min-width: 100%;">
+                            </lightning-combobox>
+                            <lightning-input label="Customer Name" type="text" class="customerName"
+                                style="min-width: 100%;" name="customerName" value={customerName}>
+                            </lightning-input>
+
+                            <lightning-input label="Phone Number" type="tel" class="customerPhone"
+                                style="min-width: 100%;" name="customerPhone" value={customerPhone}>
+                            </lightning-input>
+                        </div>
+
+                        <div class="add-footer">
+                            <button aria-label="Cancel and close" class="btn-bare"
+                                onclick={handleRecordForm}>Cancel</button>
+                            <button onclick={handleFormSave}>Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+
+    </template>
+    <!--  <template if:true={showEndChatPopup}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content" id="modal-content-id-2"
+                    style="min-width: 100%; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; gap: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   transition: transform 0.3s, box-shadow 0.3s;">
+                    <div
+                        style="display: flex; justify-content:center; align-items:center; flex-direction:column; width:100%; max-width:none">
+                        <div class="add-heading">End Chat</div>
+                        <div class="add-body">
+                            <lightning-input type="text" label="Subject" class="subject" name="subject"
+                                style="width: 100%;"></lightning-input>
+
+                            <lightning-combobox label="Status" name="status" class="status" style="width: 100%;"
+                                options={statusOptions} value={isStatus} onchange={handleStatusChange}>
+                            </lightning-combobox>
+
+                            <lightning-combobox label="Priority" name="priority" style="width: 100%;" class="priority"
+                                options={priorityOptions} value={isPriority} onchange={handlePriorityChange}>
+                            </lightning-combobox>
+                        </div>
+                        <div class="add-footer">
+                            <button aria-label="Cancel and close" class="btn-bare"
+                                onclick={handleEndChat}>Cancel</button>
+                            <button onclick={handleEndChatSave}>Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template> -->
+    <template if:true={showTemplatePopup}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content " id="modal-content-id-3"
+                    style="min-width: 100%; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; gap: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   transition: transform 0.3s, box-shadow 0.3s;">
+
+                    <div class=""
+                        style="display: flex; justify-content:center; align-items:center; flex-direction:column; width:100%; max-width:none">
+                        <div class="add-heading">
+                            Templates
+                        </div>
+                        <div class="add-body">
+                            <!-- Category (Picklist) -->
+                            <lightning-combobox name="categoryPicker" label="Select Category" value={selectedCategory}
+                                options={isTemplateCategory} onchange={handleCategoryChange}>
+                            </lightning-combobox>
+
+                            <!-- Show only if category is selected -->
+                            <template if:true={selectedCategory}>
+                                <lightning-combobox label="Template Type" style="width: 100%;" name="templateType"
+                                    class="templateType" options={isTemplateOptions} value={isTemplateType}
+                                    onchange={handleTemplateTypeChange}>
+                                </lightning-combobox>
+                            </template>
+
+                            <!-- Show only if template type is selected -->
+                            <template if:true={isTemplateType}>
+                                <lightning-combobox label="Template" name="template" class="template"
+                                    options={istemplateName} value={isTemplate} onchange={handleTemplateChange}
+                                    style="width: 100%;">
+                                </lightning-combobox>
+                            </template>
+                        </div>
+                        <div class="add-footer">
+                            <button aria-label="Cancel and close" class="btn-bare"
+                                onclick={handleTemplateClose}>Cancel</button>
+                            <button onclick={handleSendTemplate}>Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <template if:true={isGroupChat}>
+        <c-send-whats-app-template business-number={value}></c-send-whats-app-template>
+    </template>
+</template>
